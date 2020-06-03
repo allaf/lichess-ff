@@ -1,0 +1,22 @@
+{
+  "name": "lichess-ff",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "web-ext build --overwrite-dest",
+    "start": "web-ext run",
+    "lint": "web-ext lint",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/allaf/lichess-ff.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/allaf/lichess-ff/issues"
+  },
+  "homepage": "https://github.com/allaf/lichess-ff#readme"
+}
