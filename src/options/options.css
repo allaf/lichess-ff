@@ -1,0 +1,13 @@
+legend {
+  padding: 0.5em;
+}
+
+body {
+  margin-top: 30px;
+}
+
+.test-img {
+  /* border: gold solid 1px; */
+  width: 100px;
+  height: 100px;
+}

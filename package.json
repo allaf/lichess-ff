@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/allaf/lichess-ff/issues"
   },
-  "homepage": "https://github.com/allaf/lichess-ff#readme"
+  "homepage": "https://github.com/allaf/lichess-ff#readme",
+  "devDependencies": {
+    "jest": "^26.0.1"
+  }
 }
