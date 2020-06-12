@@ -1,7 +1,10 @@
+/* eslint-disable no-undef */
+
 var utils = {
   executeScripts: (tabId, injectDetailsArray) => {
     function createCallback(tabId, injectDetails, innerCallback) {
       return function () {
+        
         browser.tabs.executeScript(tabId, injectDetails, innerCallback);
       };
     }
@@ -29,8 +32,6 @@ var utils = {
   pieceTranslationToPos: (width, pieces) => {
     pieces.sort(utils.compareFct);
     pieces.forEach((p) => {
-      let hIdx = utils.calcIndex(width, p.x);
-      let vIdx = utils.calcIndex(width, p.y);
       p.idx = {
         x: utils.calcIndex(width, p.x),
         y: utils.calcIndex(width, p.y),
@@ -92,5 +93,9 @@ var utils = {
   },
 };
 
-// uncomment to test with jest
-// module.exports = utils;
+try {
+  // uncomment to test with jest
+  module.exports = utils;
+} catch (error) {
+  console.warn('moduel export failed', error);
+}

@@ -1,3 +1,6 @@
+const browser = browser;
+const document = document;
+
 function saveOptions(e) {
   browser.storage.local.set({
     token: document.querySelector('#token').value.trim(),
@@ -11,6 +14,5 @@ function restoreOptions() {
     document.querySelector('#token').value = res.token ? res.token.trim() : '';
   });
 }
-
 document.addEventListener('DOMContentLoaded', restoreOptions);
 document.addEventListener('change', saveOptions);

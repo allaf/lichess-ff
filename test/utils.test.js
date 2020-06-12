@@ -3,7 +3,7 @@
 const utils = require('../src/utils');
 
 describe('utils.test.js ', () => {
-  test('pieceTranslationToPos', () => {
+  test('pieceTranslationToPos (1)', () => {
     let res = utils.pieceTranslationToPos(398.533, pieces1);
     expect(pieces1.length).toBe(32);
     expect(res[0].idx.x).toBe(0);
@@ -13,14 +13,14 @@ describe('utils.test.js ', () => {
     expect(res[16].idx.y).toBe(5);
   });
 
-  test('pieceTranslationToPos 1', () => {
+  test('generate Fen (1)', () => {
     let withIdx = utils.pieceTranslationToPos(398.533, pieces1);
     let fen = utils.piecesIdxToFen(withIdx, 'white');
     let expected = 'rnbqkbnr/pppppppp/8/8/8/3P4/PPP1PPPP/RNBQKBNR';
     expect(fen).toBe(expected);
   });
 
-  test('pieceTranslationToPos 2', () => {
+  test('generate Fen (2)', () => {
     let withIdx = utils.pieceTranslationToPos(401.2, pieces2);
     let fen = utils.piecesIdxToFen(withIdx, 'white');
     let expected =
@@ -28,7 +28,7 @@ describe('utils.test.js ', () => {
     expect(fen).toBe(expected);
   });
 
-  test('pieceTranslationToPos 3', () => {
+  test('generate Fen (3)', () => {
     let withIdx = utils.pieceTranslationToPos(414.267, pieces3);
     let fen = utils.piecesIdxToFen(withIdx, 'white');
     let expected =
@@ -36,7 +36,7 @@ describe('utils.test.js ', () => {
     expect(fen).toBe(expected);
   });
 
-  test('pieceTranslationToPos as black', () => {
+  test('generate Fen as black (4)', () => {
     let withIdx = utils.pieceTranslationToPos(469.867, pieces4);
     let fen = utils.piecesIdxToFen(withIdx, 'black');
     let expected = 'rnbqkbnr/pppppppp/8/8/3P4/8/PPP1PPPP/RNBQKBNR';

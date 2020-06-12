@@ -5,7 +5,8 @@
   "scripts": {
     "build": "web-ext build --overwrite-dest",
     "start": "web-ext run",
-    "lint": "web-ext lint",
+    "web-ext-lint": "web-ext lint",
+    "lint": "eslint src",
     "test": "jest",
     "test:watch": "jest --watch",
     "clear": "jest --clearCache "
@@ -21,6 +22,34 @@
   },
   "homepage": "https://github.com/allaf/lichess-ff#readme",
   "devDependencies": {
+    "eslint": "^7.2.0",
     "jest": "^26.0.1"
+  },
+  "eslintConfig": {
+    "overrides": [
+      {
+        "files": [
+          "src/**/*.js"
+        ],
+        "excludedFiles": "*.test.js",
+        "rules": {
+          "no-undef": 2,
+          "no-shadow-restricted-names": 2,
+          "no-unused-vars": 2,
+          "no-redeclare": 2,
+          "quotes": [
+            "error",
+            "single"
+          ]
+        }
+      }
+    ],
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "env": {
+      "node": true
+    }
   }
 }

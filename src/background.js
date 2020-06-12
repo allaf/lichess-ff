@@ -1,27 +1,30 @@
 'use strict';
 
+// eslint-disable-next-line no-undef
+const brw = browser;
+
 //TODO avoid magic strings
-function urlMatches(url, regexp) {
+function urlMatches(url) {
   return url.match('https://lichess.org/*');
 }
 
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
+// function escapeRegExp(string) {
+// return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+// }
 
 function initializePageAction(tab) {
-  let regexp = escapeRegExp(tab.url);
+  // let regexp = escapeRegExp(tab.url);
 
-  if (urlMatches(tab.url, regexp)) {
-    browser.pageAction.setTitle({ tabId: tab.id, title: 'Lichess tips' });
-    browser.pageAction.show(tab.id);
+  if (urlMatches(tab.url)) {
+    brw.pageAction.setTitle({ tabId: tab.id, title: 'Lichess tips' });
+    brw.pageAction.show(tab.id);
   }
 }
 
 /*
 When first loaded, initialize the page action for all tabs.
 */
-browser.tabs.query({}).then((tabs) => {
+brw.tabs.query({}).then((tabs) => {
   for (let tab of tabs) {
     initializePageAction(tab);
   }
@@ -30,14 +33,15 @@ browser.tabs.query({}).then((tabs) => {
 /*
 Each time a tab is updated, reset the page action for that tab.
 */
-browser.tabs.onUpdated.addListener((id, changeInfo, tab) => {
+brw.tabs.onUpdated.addListener((id, changeInfo, tab) => {
   initializePageAction(tab);
 });
 
-browser.pageAction.onClicked.addListener((tabInfo) => {
-  let local = browser.storage.local.get('token');
+brw.pageAction.onClicked.addListener((tabInfo) => {
+  let local = brw.storage.local.get('token');
   local.then((storage) => {
     if (storage.token)
+      // eslint-disable-next-line no-undef
       apiUtils
         .getCurrentGame(tabInfo.url, storage.token)
         .subscribe((currentGame) => {
@@ -49,6 +53,7 @@ browser.pageAction.onClicked.addListener((tabInfo) => {
 });
 
 function loadContentScript(tabId) {
+  // eslint-disable-next-line no-undef
   utils.executeScripts(tabId, [
     { file: '/libs/jquery-3.5.1.min.js' },
     { file: '/libs/rxjs.umd.min.js' },
