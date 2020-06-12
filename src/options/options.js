@@ -12,16 +12,7 @@ function saveOptions(e) {
 }
 
 function restoreOptions() {
-  // let storageItem = brw.storage.local.get('token');
-  // let storageApiKey = brw.storage.local.get('apiKey');
-  // storageItem.then((res) => {
-  //   doc.querySelector('#token').value = res.token ? res.token.trim() : '';
-  // });
-  // storageApiKey.then((res) => {
-  //   doc.querySelector('#apiKey').value = res.apiKey ? res.apiKey.trim() : '';
-  // });
-
-  let storage = brw.storage.local.get();
+  const storage = brw.storage.local.get();
   storage.then((res) => {
     doc.querySelector('#token').value = res.token ? res.token.trim() : '';
     doc.querySelector('#apiKey').value = res.apiKey ? res.apiKey.trim() : '';

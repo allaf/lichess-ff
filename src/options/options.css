@@ -2,12 +2,16 @@ legend {
   padding: 0.5em;
 }
 
-body {
-  margin-top: 30px;
+form {
+  padding: 1rem;
 }
 
 .test-img {
   /* border: gold solid 1px; */
   width: 100px;
   height: 100px;
+}
+
+label {
+  font-size: 1.3rem;
 }

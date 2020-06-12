@@ -1,6 +1,22 @@
 'use strict';
 
-console.log('background starts');
+//TODO mutliples fen per db entry
+
+console.log('background starts', browser.runtime.getURL('img/ajax-loader.gif'));
+
+
+// elLocalFile.addEventListener('change', () => {
+//   const reader = new FileReader();
+//   reader.readAsText(elLocalFile.files[0]);
+//   reader.addEventListener('loadend', async () => {
+//       const file = reader.result;
+//       await browser.storage.local.set({
+//           local_file: file
+//       });
+//       options.toggleVisibility(elLocalFileDeleteLink, true);
+//   });
+// });
+// moz-extension://e83a38cb-4683-46b6-878f-46a45565d40c/img/ajax-loader.gif
 
 // eslint-disable-next-line no-undef
 const brw = browser;

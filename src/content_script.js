@@ -9,6 +9,7 @@ const Utils = utils;
 const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
+//TODO afficher chargeur à l'update
 
 let DB = [];
 
@@ -18,7 +19,11 @@ gameSubject.subscribe((game) => {
     var tipsDiv = jQuery('.mchat__content.tips-content');
     if (tipsDiv) {
       console.log('am updating the tips => ');
+      //TODO ici
+      jQuery('#tips-wait').show();
       tipsDiv.html(buildHtmlTips(game));
+      jQuery('#tips-wait').hide();
+      //TODO ici
     }
   }
 });
@@ -47,7 +52,7 @@ function main() {
   });
   jQuery('.mchat__tab.tips').click();
 
-  monitorBoard();
+  monitorChange();
 }
 
 function buildHtmlTips(currentGame) {
@@ -59,12 +64,17 @@ function buildHtmlTips(currentGame) {
       '</ul>'
     : '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px"><span>rien :(</span> </div>';
 
+  var today = new Date();
+  var time =
+    today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
+
   let lastMove = $('.moves > m2.active').text();
-  console.log('AAAAAAAAAAAA', lastMove);
   html +=
-    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;">Opponent last move : <strong>' +
+    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;">Last move : <strong>' +
     lastMove +
-    '</strong></span>';
+    ' (' +
+    time +
+    ') </strong></span>';
   return html;
 }
 
@@ -92,7 +102,7 @@ function getListLinks(gameList) {
         g.url +
         '" >' +
         g.name +
-        ' ' +
+        ' : ' +
         g.nextMoves +
         '</a></li>'
     )
@@ -100,17 +110,26 @@ function getListLinks(gameList) {
 }
 
 function insertHtmlTab() {
+  const waitImg = browser.runtime.getURL('img/ajax-loader.gif');
+  // const waitImg = 'http://www.ajaxload.info/cache/FF/FF/FF/00/00/00/1-0.gif'
   jQuery('.mchat__tabs.nb_2').append(
-    '<div id="tips" class="mchat__tab tips"><span>Tips</span></div>'
+    '<div id="tips" class="mchat__tab tips"><span>Tips</span>' +
+      '<span id="tips-wait" style="">...</span>'
+    // '<img id="tips-wait" src="' +
+    // waitImg +
+    // '"  width="20" height="20" />  </div>'
   );
 }
 
-function monitorBoard() {
-  console.log('MONITORIG BOARD');
-  jQuery('cg-board').on('DOMSubtreeModified', () => {
-    console.log('DOMSubtreeModified');
+let nbMoves = jQuery('.moves>m2').length;
+
+function monitorChange() {
+  jQuery('.moves').on('DOMSubtreeModified', () => {
     //TODO check myturn
-    updateGame();
+    console.log('trace moves', isMyTurn(), nbMoves, jQuery('.moves>m2').length);
+    if (isMyTurn() && nbMoves !== jQuery('.moves>m2').length) {
+      updateGame();
+    }
   });
 }
 
@@ -123,13 +142,9 @@ function updateGame(force = false) {
   let g = gameSubject.getValue();
   console.log('current Fen', g.fen);
   console.log('parsed  Fen', fen);
-  // if (g.fen !== fen || force) {
   console.log('nexting game');
   g.fen = fen;
   gameSubject.next(g);
-  // } else {
-  // console.log('not game');
-  // }
 }
 
 function isMyTurn() {

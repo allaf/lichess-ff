@@ -4,7 +4,7 @@
   "version": "0.1",
   "description": "Chess traps hints for Lichess",
   "icons": {
-    "48": "icons/lichess_logo.png"
+    "48": "img/lichess_logo.png"
   },
   "background": {
     "scripts": [
@@ -16,8 +16,9 @@
     ]
   },
   "page_action": {
-    "default_icon": "icons/lichess_logo.png"
+    "default_icon": "img/lichess_logo.png"
   },
+  "web_accessible_resources": ["img/"],
   "permissions": [
     "activeTab",
     "tabs",
