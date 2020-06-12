@@ -4,20 +4,6 @@
 
 console.log('background starts', browser.runtime.getURL('img/ajax-loader.gif'));
 
-
-// elLocalFile.addEventListener('change', () => {
-//   const reader = new FileReader();
-//   reader.readAsText(elLocalFile.files[0]);
-//   reader.addEventListener('loadend', async () => {
-//       const file = reader.result;
-//       await browser.storage.local.set({
-//           local_file: file
-//       });
-//       options.toggleVisibility(elLocalFileDeleteLink, true);
-//   });
-// });
-// moz-extension://e83a38cb-4683-46b6-878f-46a45565d40c/img/ajax-loader.gif
-
 // eslint-disable-next-line no-undef
 const brw = browser;
 
@@ -26,7 +12,6 @@ const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
 const FILE_RXJS = '/libs/rxjs.umd.min.js';
 const FILE_UTILS = '/src/utils.js';
 const FILE_API_UTILS = '/src/apiUtils.js';
-// const FILE_DATA = '/src/data.js';
 const FILE_CONTENT_SCRIPT = '/src/content_script.js';
 
 let DB = [];
@@ -58,12 +43,23 @@ brw.tabs.onUpdated.addListener((id, changeInfo, tab) => {
   initializePageAction(tab);
 });
 
+function displayWarningSettings(tabId) {
+  console.warn('You must define storage.token && storage.apiKey');
+  brw.pageAction.setTitle({
+    tabId: tabId,
+    title: 'You must set the token and api-key in the extension settings',
+  });
+  brw.pageAction
+    .setIcon({ tabId: tabId, path: 'img/lichess_logo_sad.png' })
+    .then((x) => x);
+  brw.pageAction.show(tabId);
+}
+
 brw.pageAction.onClicked.addListener((tabInfo) => {
   let local = brw.storage.local.get();
   local.then((storage) => {
-    if(!(storage.token && storage.apiKey)) {
-      //TODO afficher msg qqpart
-      console.error('You must define storage.token && storage.apiKey', storage)
+    if (!(storage.token && storage.apiKey)) {
+      displayWarningSettings(tabInfo.id);
     }
     if (storage.token && storage.apiKey)
       // eslint-disable-next-line no-undef
@@ -97,7 +93,6 @@ function loadContentScript(tabId) {
     { file: FILE_RXJS },
     { file: FILE_UTILS },
     { file: FILE_API_UTILS },
-    // { file: FILE_DATA },
     { file: FILE_CONTENT_SCRIPT },
   ]);
 }

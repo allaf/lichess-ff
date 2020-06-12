@@ -13,7 +13,7 @@ var utils = {
   },
 
   calcIndex: (width, x) => {
-    let unit = width / 8;
+    const unit = width / 8;
     return Math.round(x / unit);
   },
 
@@ -92,7 +92,6 @@ var utils = {
 };
 
 try {
-  // uncomment to test with jest
   module.exports = utils;
 } catch (error) {
   console.warn('moduel export failed', error);

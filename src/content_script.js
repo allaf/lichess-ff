@@ -9,7 +9,6 @@ const Utils = utils;
 const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
-//TODO afficher chargeur à l'update
 
 let DB = [];
 
@@ -19,11 +18,9 @@ gameSubject.subscribe((game) => {
     var tipsDiv = jQuery('.mchat__content.tips-content');
     if (tipsDiv) {
       console.log('am updating the tips => ');
-      //TODO ici
       jQuery('#tips-wait').show();
       tipsDiv.html(buildHtmlTips(game));
       jQuery('#tips-wait').hide();
-      //TODO ici
     }
   }
 });
@@ -110,14 +107,10 @@ function getListLinks(gameList) {
 }
 
 function insertHtmlTab() {
-  const waitImg = browser.runtime.getURL('img/ajax-loader.gif');
-  // const waitImg = 'http://www.ajaxload.info/cache/FF/FF/FF/00/00/00/1-0.gif'
+  // const waitImg = browser.runtime.getURL('img/ajax-loader.gif');
   jQuery('.mchat__tabs.nb_2').append(
     '<div id="tips" class="mchat__tab tips"><span>Tips</span>' +
       '<span id="tips-wait" style="">...</span>'
-    // '<img id="tips-wait" src="' +
-    // waitImg +
-    // '"  width="20" height="20" />  </div>'
   );
 }
 
@@ -125,8 +118,6 @@ let nbMoves = jQuery('.moves>m2').length;
 
 function monitorChange() {
   jQuery('.moves').on('DOMSubtreeModified', () => {
-    //TODO check myturn
-    console.log('trace moves', isMyTurn(), nbMoves, jQuery('.moves>m2').length);
     if (isMyTurn() && nbMoves !== jQuery('.moves>m2').length) {
       updateGame();
     }
