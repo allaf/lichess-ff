@@ -1,18 +1,32 @@
-const browser = browser;
-const document = document;
+/* eslint-disable no-undef */
+const brw = browser;
+const doc = document;
+/* eslint-enable no-undef */
 
 function saveOptions(e) {
-  browser.storage.local.set({
-    token: document.querySelector('#token').value.trim(),
+  brw.storage.local.set({
+    token: doc.querySelector('#token').value.trim(),
+    apiKey: doc.querySelector('#apiKey').value.trim(),
   });
   e.preventDefault();
 }
 
 function restoreOptions() {
-  let storageItem = browser.storage.local.get('token');
-  storageItem.then((res) => {
-    document.querySelector('#token').value = res.token ? res.token.trim() : '';
+  // let storageItem = brw.storage.local.get('token');
+  // let storageApiKey = brw.storage.local.get('apiKey');
+  // storageItem.then((res) => {
+  //   doc.querySelector('#token').value = res.token ? res.token.trim() : '';
+  // });
+  // storageApiKey.then((res) => {
+  //   doc.querySelector('#apiKey').value = res.apiKey ? res.apiKey.trim() : '';
+  // });
+
+  let storage = brw.storage.local.get();
+  storage.then((res) => {
+    doc.querySelector('#token').value = res.token ? res.token.trim() : '';
+    doc.querySelector('#apiKey').value = res.apiKey ? res.apiKey.trim() : '';
   });
 }
-document.addEventListener('DOMContentLoaded', restoreOptions);
-document.addEventListener('change', saveOptions);
+
+doc.addEventListener('DOMContentLoaded', restoreOptions);
+doc.addEventListener('change', saveOptions);

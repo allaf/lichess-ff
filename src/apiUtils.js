@@ -3,11 +3,26 @@
 let { from } = rxjs;
 let { map } = rxjs.operators;
 
+const URL_ACCOUNT = 'https://lichess.org/api/account/playing';
+
 // eslint-disable-next-line no-unused-vars
 var apiUtils = {
+  getDistantDb: (apiKey) => 
+    $.ajax({
+      async: true,
+      crossDomain: true,
+      url: 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db',
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'x-apikey': apiKey,
+        'cache-control': 'no-cache',
+      },
+    }),
+
   getCurrentGame: (currentUrl, token) => {
     return from(
-      fetch('https://lichess.org/api/account/playing', {
+      fetch(URL_ACCOUNT, {
         method: 'get',
         headers: {
           Authorization: 'Bearer ' + token,

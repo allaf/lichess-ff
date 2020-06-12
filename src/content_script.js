@@ -1,6 +1,6 @@
 'use strict';
 
-// TODO db sur le cloud ?
+console.log('content starts');
 
 /* eslint-disable no-undef */
 const jQuery = $;
@@ -10,10 +10,9 @@ const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
 
-console.log('content script starts');
+let DB = [];
 
 const gameSubject = new rx.BehaviorSubject();
-
 gameSubject.subscribe((game) => {
   if (game) {
     var div = jQuery('.mchat__content.tips-content');
@@ -27,7 +26,7 @@ gameSubject.subscribe((game) => {
 function main() {
   insertHtmlTab();
 
-  updateGame(true);
+  updateGame(false);
 
   jQuery('.mchat__tab').click(function () {
     var jThis = jQuery(this);
@@ -41,8 +40,7 @@ function main() {
       contentObj.removeClass();
       contentObj.addClass('mchat__content');
       contentObj.addClass('tips-content');
-      let suggHtml =
-        buildHtmlTips(gameSubject.getValue()) + '<br>' + Date.now();
+      let suggHtml = buildHtmlTips(gameSubject.getValue());
       contentObj.html(suggHtml);
     } else {
       jQuery('.tips-content').empty();
@@ -51,6 +49,23 @@ function main() {
   jQuery('.mchat__tab.tips').click();
 
   monitorBoard();
+}
+
+function buildHtmlTips(currentGame) {
+  let tipsList = fetchTips(currentGame);
+  console.log('buildHtmlTips ====> tips found : ', tipsList.length);
+  let html = tipsList.length
+    ? '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
+      getListLinks(tipsList) +
+      '</ul>'
+    : '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px"><span>rien :(</span> </div>';
+
+  let lastMove = $('.moves > m2.active').text();
+  html +=
+    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;">last move is <strong>' +
+    lastMove +
+    '</strong></span>';
+  return html;
 }
 
 function parsePieces() {
@@ -66,19 +81,7 @@ function parsePieces() {
       y: Number(coords[2]),
     };
   });
-  // console.log('jsonPieces', jsonPieces);
   return jsonPieces;
-}
-
-function buildHtmlTips(currentGame) {
-  let positionList = fetchTipsFor(currentGame);
-  console.log('positionList found', positionList.length);
-  let html = positionList.length
-    ? '<ul style="padding:.5em 0 .5em 10px">' +
-      getListLinks(positionList) +
-      '</ul>'
-    : 'rien :(';
-  return html;
 }
 
 function getListLinks(gameList) {
@@ -103,25 +106,12 @@ function insertHtmlTab() {
 }
 
 function monitorBoard() {
-  jQuery('cg-board').on('DOMSubtreeModified', function (e) {
-    console.log('DOMSubtreeModified', e);
-    console.log('TRURN =>', isMyTurn());
-    // if (isMyTurn()) {
+  console.log('MONITORIG BOARD');
+  jQuery('cg-board').on('DOMSubtreeModified', () => {
+    console.log('DOMSubtreeModified');
+    //TODO check myturn
     updateGame();
-    // } else {
-    // console.log('I could update but it is not my turn :/');
-    // }
   });
-}
-
-function isMyTurn() {
-  console.log('TURN DEB =>');
-  let nbMoves = jQuery('.moves > m2').length;
-  let myColor = gameSubject.getValue().color;
-  return (
-    (myColor === 'white' && !(nbMoves % 2)) ||
-    (myColor === 'black' && nbMoves % 2)
-  );
 }
 
 function updateGame(force = false) {
@@ -134,12 +124,28 @@ function updateGame(force = false) {
   console.log('current Fen', g.fen);
   console.log('parsed  Fen', fen);
   if (g.fen !== fen || force) {
+    console.log('nexting game');
     g.fen = fen;
     gameSubject.next(g);
+  } else {
+    console.log('not game');
   }
 }
 
-function fetchTipsFor(currentGame) {
+function isMyTurn() {
+  let nbMoves = jQuery('.moves > m2').length;
+  let myColor = gameSubject.getValue().color;
+  return (
+    (myColor === 'white' && !(nbMoves % 2)) ||
+    (myColor === 'black' && nbMoves % 2)
+  );
+}
+
+function getDb() {
+  return DB;
+}
+
+function fetchTips(currentGame) {
   // eslint-disable-next-line no-undef
   return getDb()
     .games.filter((g) => g.fen.split(' ')[0] === currentGame.fen)
@@ -154,13 +160,15 @@ jQuery(document).ready(function () {
         // eslint-disable-next-line no-undef
         .getCurrentGame(window.location.href, storage.token)
         .subscribe((g) => {
-          gameSubject.next(g);
-
-          //
-          main();
+          brw.runtime.sendMessage('get-data').then((reply) => {
+            DB = reply;
+            console.log('DB recup', DB);
+            gameSubject.next(g);
+            main();
+          });
         });
     }
   });
 });
 
-console.log('content script ends');
+console.log('content end');

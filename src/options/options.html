@@ -4,13 +4,14 @@
   <head>
     <meta charset="utf-8" />
     <link href="options.css" rel="stylesheet" type="text/css" />
-    <script src="/libs/jquery-3.5.1.min.js"></script>
-    <script src="/libs/rxjs.umd.min.js"></script>
   </head>
   <body>
+    <!-- TODO bootstrap ?-->
     <form>
-      <label>Token : </label>
-      <input type="text" id="token" size="15" />
+      <label>Lichess Token  : &nbsp;</label>
+      <input type="text" id="token" size="15" /><br>
+      <label>Mongo apiKey  : </label>
+      <input type="text" id="apiKey" size="15" />
     </form>
     <h3>
       <a href="https://lichess.org/account/oauth/token/create"

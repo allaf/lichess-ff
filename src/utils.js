@@ -1,10 +1,8 @@
-/* eslint-disable no-undef */
-
 var utils = {
   executeScripts: (tabId, injectDetailsArray) => {
     function createCallback(tabId, injectDetails, innerCallback) {
       return function () {
-        
+        // eslint-disable-next-line no-undef
         browser.tabs.executeScript(tabId, injectDetails, innerCallback);
       };
     }

@@ -1,20 +1,25 @@
 'use strict';
 
+console.log('background starts');
+
 // eslint-disable-next-line no-undef
 const brw = browser;
 
-//TODO avoid magic strings
+const URL_MATCH = 'https://lichess.org/*';
+const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
+const FILE_RXJS = '/libs/rxjs.umd.min.js';
+const FILE_UTILS = '/src/utils.js';
+const FILE_API_UTILS = '/src/apiUtils.js';
+// const FILE_DATA = '/src/data.js';
+const FILE_CONTENT_SCRIPT = '/src/content_script.js';
+
+let DB = [];
+
 function urlMatches(url) {
-  return url.match('https://lichess.org/*');
+  return url.match(URL_MATCH);
 }
 
-// function escapeRegExp(string) {
-// return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-// }
-
 function initializePageAction(tab) {
-  // let regexp = escapeRegExp(tab.url);
-
   if (urlMatches(tab.url)) {
     brw.pageAction.setTitle({ tabId: tab.id, title: 'Lichess tips' });
     brw.pageAction.show(tab.id);
@@ -38,28 +43,47 @@ brw.tabs.onUpdated.addListener((id, changeInfo, tab) => {
 });
 
 brw.pageAction.onClicked.addListener((tabInfo) => {
-  let local = brw.storage.local.get('token');
+  let local = brw.storage.local.get();
   local.then((storage) => {
-    if (storage.token)
+    if(!(storage.token && storage.apiKey)) {
+      //TODO afficher msg qqpart
+      console.error('You must define storage.token && storage.apiKey', storage)
+    }
+    if (storage.token && storage.apiKey)
       // eslint-disable-next-line no-undef
       apiUtils
         .getCurrentGame(tabInfo.url, storage.token)
         .subscribe((currentGame) => {
           if (currentGame) {
-            loadContentScript(tabInfo.id);
+            // eslint-disable-next-line no-undef
+            apiUtils.getDistantDb(storage.apiKey).then((data) => {
+              console.log('DB fetched', data);
+              DB = data;
+              loadContentScript(tabInfo.id);
+            });
           }
         });
   });
 });
 
+brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
+  if (msg == 'get-data') {
+    sendReply({
+      games: DB,
+    });
+  }
+});
+
 function loadContentScript(tabId) {
   // eslint-disable-next-line no-undef
   utils.executeScripts(tabId, [
-    { file: '/libs/jquery-3.5.1.min.js' },
-    { file: '/libs/rxjs.umd.min.js' },
-    { file: '/src/utils.js' },
-    { file: '/src/apiUtils.js' },
-    { file: '/src/data.js' },
-    { file: '/src/content_script.js' },
+    { file: FILE_JQUERY },
+    { file: FILE_RXJS },
+    { file: FILE_UTILS },
+    { file: FILE_API_UTILS },
+    // { file: FILE_DATA },
+    { file: FILE_CONTENT_SCRIPT },
   ]);
 }
+
+console.log('background ends');
