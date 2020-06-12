@@ -15,10 +15,10 @@ let DB = [];
 const gameSubject = new rx.BehaviorSubject();
 gameSubject.subscribe((game) => {
   if (game) {
-    var div = jQuery('.mchat__content.tips-content');
-    if (div) {
+    var tipsDiv = jQuery('.mchat__content.tips-content');
+    if (tipsDiv) {
       console.log('am updating the tips => ');
-      div.html(buildHtmlTips(game));
+      tipsDiv.html(buildHtmlTips(game));
     }
   }
 });
@@ -40,8 +40,7 @@ function main() {
       contentObj.removeClass();
       contentObj.addClass('mchat__content');
       contentObj.addClass('tips-content');
-      let suggHtml = buildHtmlTips(gameSubject.getValue());
-      contentObj.html(suggHtml);
+      contentObj.html(buildHtmlTips(gameSubject.getValue()));
     } else {
       jQuery('.tips-content').empty();
     }
@@ -52,17 +51,18 @@ function main() {
 }
 
 function buildHtmlTips(currentGame) {
-  let tipsList = fetchTips(currentGame);
-  console.log('buildHtmlTips ====> tips found : ', tipsList.length);
-  let html = tipsList.length
+  let tips = fetchTips(currentGame);
+  console.log('buildHtmlTips ====> tips found : ', tips.length);
+  let html = tips.length
     ? '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
-      getListLinks(tipsList) +
+      getListLinks(tips) +
       '</ul>'
     : '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px"><span>rien :(</span> </div>';
 
   let lastMove = $('.moves > m2.active').text();
+  console.log('AAAAAAAAAAAA', lastMove);
   html +=
-    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;">last move is <strong>' +
+    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;">Opponent last move : <strong>' +
     lastMove +
     '</strong></span>';
   return html;
@@ -123,13 +123,13 @@ function updateGame(force = false) {
   let g = gameSubject.getValue();
   console.log('current Fen', g.fen);
   console.log('parsed  Fen', fen);
-  if (g.fen !== fen || force) {
-    console.log('nexting game');
-    g.fen = fen;
-    gameSubject.next(g);
-  } else {
-    console.log('not game');
-  }
+  // if (g.fen !== fen || force) {
+  console.log('nexting game');
+  g.fen = fen;
+  gameSubject.next(g);
+  // } else {
+  // console.log('not game');
+  // }
 }
 
 function isMyTurn() {
