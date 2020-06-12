@@ -2,7 +2,7 @@
 
 //TODO mutliples fen per db entry
 
-console.log('background starts', browser.runtime.getURL('img/ajax-loader.gif'));
+console.log('background starts');
 
 // eslint-disable-next-line no-undef
 const brw = browser;
@@ -31,7 +31,7 @@ function initializePageAction(tab) {
 When first loaded, initialize the page action for all tabs.
 */
 brw.tabs.query({}).then((tabs) => {
-  for (let tab of tabs) {
+  for (const tab of tabs) {
     initializePageAction(tab);
   }
 });
@@ -56,7 +56,7 @@ function displayWarningSettings(tabId) {
 }
 
 brw.pageAction.onClicked.addListener((tabInfo) => {
-  let local = brw.storage.local.get();
+  const local = brw.storage.local.get();
   local.then((storage) => {
     if (!(storage.token && storage.apiKey)) {
       displayWarningSettings(tabInfo.id);

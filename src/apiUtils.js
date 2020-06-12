@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 
-let { from } = rxjs;
-let { map } = rxjs.operators;
+const { from } = rxjs;
+const { map } = rxjs.operators;
 
 const URL_ACCOUNT = 'https://lichess.org/api/account/playing';
 

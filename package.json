@@ -7,6 +7,7 @@
     "start": "web-ext run",
     "web-ext-lint": "web-ext lint",
     "lint": "eslint src",
+    "lint-fix": "eslint src --fix  ",
     "lint-watch": "esw -w src",
     "test": "jest",
     "test:watch": "jest --watch",

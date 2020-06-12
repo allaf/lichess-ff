@@ -28,7 +28,7 @@ gameSubject.subscribe((game) => {
 function main() {
   insertHtmlTab();
 
-  updateGame(false);
+  updateGame();
 
   jQuery('.mchat__tab').click(function () {
     var jThis = jQuery(this);
@@ -37,7 +37,7 @@ function main() {
     jThis.addClass(activeTabClass);
 
     if (jThis.hasClass('tips')) {
-      let contentObj = jQuery('.mchat__content');
+      const contentObj = jQuery('.mchat__content');
       contentObj.empty();
       contentObj.removeClass();
       contentObj.addClass('mchat__content');
@@ -53,19 +53,19 @@ function main() {
 }
 
 function buildHtmlTips(currentGame) {
-  let tips = fetchTips(currentGame);
+  const tips = fetchTips(currentGame);
   console.log('buildHtmlTips ====> tips found : ', tips.length);
   let html = tips.length
     ? '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
       getListLinks(tips) +
       '</ul>'
-    : '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px"><span>rien :(</span> </div>';
+    : '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px"><span>No tips found :(</span> </div>';
 
   var today = new Date();
   var time =
     today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
 
-  let lastMove = $('.moves > m2.active').text();
+  const lastMove = jQuery('.moves > m2.active').text();
   html +=
     '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;">Last move : <strong>' +
     lastMove +
@@ -76,11 +76,13 @@ function buildHtmlTips(currentGame) {
 }
 
 function parsePieces() {
-  let domPieces = jQuery('cg-board > piece').toArray();
+  const domPieces = jQuery('cg-board > piece').toArray();
 
-  let jsonPieces = domPieces.map((domPiece) => {
+  const jsonPieces = domPieces.map((domPiece) => {
     const jp = jQuery(domPiece);
-    let coords = jp.css('transform').match(/matrix\(1, 0, 0, 1, (.*), (.*)\)$/);
+    const coords = jp
+      .css('transform')
+      .match(/matrix\(1, 0, 0, 1, (.*), (.*)\)$/);
     return {
       color: jp.hasClass('black') ? 'black' : 'white',
       piece: jp.attr('class').split(/[ ]/).pop(),
@@ -114,7 +116,7 @@ function insertHtmlTab() {
   );
 }
 
-let nbMoves = jQuery('.moves>m2').length;
+const nbMoves = jQuery('.moves>m2').length;
 
 function monitorChange() {
   jQuery('.moves').on('DOMSubtreeModified', () => {
@@ -124,13 +126,13 @@ function monitorChange() {
   });
 }
 
-function updateGame(force = false) {
-  let pieces = parsePieces();
-  let width = jQuery('cg-container').innerWidth();
-  let piecesWithIdx = Utils.pieceTranslationToPos(width, pieces);
-  let fen = Utils.piecesIdxToFen(piecesWithIdx, gameSubject.getValue().color);
+function updateGame() {
+  const pieces = parsePieces();
+  const width = jQuery('cg-container').innerWidth();
+  const piecesWithIdx = Utils.pieceTranslationToPos(width, pieces);
+  const fen = Utils.piecesIdxToFen(piecesWithIdx, gameSubject.getValue().color);
 
-  let g = gameSubject.getValue();
+  const g = gameSubject.getValue();
   console.log('current Fen', g.fen);
   console.log('parsed  Fen', fen);
   console.log('nexting game');
@@ -139,8 +141,8 @@ function updateGame(force = false) {
 }
 
 function isMyTurn() {
-  let nbMoves = jQuery('.moves > m2').length;
-  let myColor = gameSubject.getValue().color;
+  const nbMoves = jQuery('.moves > m2').length;
+  const myColor = gameSubject.getValue().color;
   return (
     (myColor === 'white' && !(nbMoves % 2)) ||
     (myColor === 'black' && nbMoves % 2)

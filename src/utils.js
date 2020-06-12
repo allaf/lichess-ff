@@ -69,7 +69,7 @@ var utils = {
       count = 0;
 
       for (var j = 0; j < 8; j++) {
-        let p = board[i][j];
+        const p = board[i][j];
 
         if (j === 7 && !p) {
           fen += count + 1;
