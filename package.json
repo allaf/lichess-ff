@@ -7,7 +7,8 @@
     "start": "web-ext run",
     "lint": "web-ext lint",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "clear": "jest --clearCache "
   },
   "repository": {
     "type": "git",

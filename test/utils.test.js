@@ -44,8 +44,6 @@ describe('utils.test.js ', () => {
   });
 });
 
-/* TypeError: can't access dead object */
-
 let pieces4 = [
   {
     color: 'white',

@@ -1,10 +1,5 @@
 'use strict';
 
-// let { from } = rxjs;
-// let { tap, map } = rxjs.operators;
-
-console.log('BACKGROUND SCRIPT START');
-
 //TODO avoid magic strings
 function urlMatches(url, regexp) {
   return url.match('https://lichess.org/*');
@@ -39,36 +34,27 @@ browser.tabs.onUpdated.addListener((id, changeInfo, tab) => {
   initializePageAction(tab);
 });
 
-// browser.runtime.onMessage.addListener((message, sender, sendResponse) => {});
-
 browser.pageAction.onClicked.addListener((tabInfo) => {
-  // loadContentScript(tabInfo.id);
-
   let local = browser.storage.local.get('token');
   local.then((storage) => {
     if (storage.token)
-      utils2
+      apiUtils
         .getCurrentGame(tabInfo.url, storage.token)
         .subscribe((currentGame) => {
           if (currentGame) {
-            console.log('B : ', currentGame.gameId);
             loadContentScript(tabInfo.id);
           }
         });
   });
 });
 
-//TODO so ugly
 function loadContentScript(tabId) {
   utils.executeScripts(tabId, [
     { file: '/libs/jquery-3.5.1.min.js' },
     { file: '/libs/rxjs.umd.min.js' },
     { file: '/src/utils.js' },
-    { file: '/src/utils2.js' },
+    { file: '/src/apiUtils.js' },
+    { file: '/src/data.js' },
     { file: '/src/content_script.js' },
   ]);
 }
-
-console.log('BACKGROUND SCRIPT END');
-
-
