@@ -6,9 +6,9 @@
     "build": "web-ext build --overwrite-dest",
     "start": "web-ext run",
     "web-ext-lint": "web-ext lint",
-    "lint": "eslint src",
-    "lint-fix": "eslint src --fix  ",
-    "lint-watch": "esw -w src",
+    "lint": "eslint",
+    "lint-fix": "eslint --fix  ",
+    "lint-watch": "esw -w",
     "test": "jest",
     "test:watch": "jest --watch",
     "clear": "jest --clearCache "

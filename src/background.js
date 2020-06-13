@@ -43,11 +43,11 @@ brw.tabs.onUpdated.addListener((id, changeInfo, tab) => {
   initializePageAction(tab);
 });
 
-function displayWarningSettings(tabId) {
+function displayWarningSettings(tabId, title) {
   console.warn('You must define storage.token && storage.apiKey');
   brw.pageAction.setTitle({
     tabId: tabId,
-    title: 'You must set the token and api-key in the extension settings',
+    title,
   });
   brw.pageAction
     .setIcon({ tabId: tabId, path: 'img/lichess_logo_sad.png' })
@@ -59,7 +59,10 @@ brw.pageAction.onClicked.addListener((tabInfo) => {
   const local = brw.storage.local.get();
   local.then((storage) => {
     if (!(storage.token && storage.apiKey)) {
-      displayWarningSettings(tabInfo.id);
+      displayWarningSettings(
+        tabInfo.id,
+        'You must set the token and api-key in the extension settings'
+      );
     }
     if (storage.token && storage.apiKey)
       // eslint-disable-next-line no-undef
@@ -73,6 +76,8 @@ brw.pageAction.onClicked.addListener((tabInfo) => {
               DB = data;
               loadContentScript(tabInfo.id);
             });
+          } else {
+            displayWarningSettings(tabInfo.id, 'No ongoing game or not on the right tab');
           }
         });
   });
