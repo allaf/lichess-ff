@@ -66,7 +66,7 @@ brw.pageAction.onClicked.addListener((tabInfo) => {
     if (!(storage.token && storage.apiKey && storage.restdb)) {
       displayWarningSettings(tabInfo.id, 'You must setup the addon');
     }
-    if (storage.token && storage.apiKey && storage.restdb)
+    if (storage.token && storage.apiKey && storage.restdb) {
       // eslint-disable-next-line no-undef
       apiUtils
         .getCurrentGame(tabInfo.url, storage.token)
@@ -87,11 +87,12 @@ brw.pageAction.onClicked.addListener((tabInfo) => {
             );
           }
         });
+    }
   });
 });
 
 brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
-  if (msg == 'get-data') {
+  if (msg === 'get-data') {
     sendReply({
       games: DB,
     });

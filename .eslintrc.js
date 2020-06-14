@@ -12,6 +12,8 @@ module.exports = {
     ecmaVersion: 11,
   },
   rules: {
+    curly: 2,
+    eqeqeq: 2,
     'prefer-const': 2,
     'no-undef': 2,
     'no-shadow-restricted-names': 2,

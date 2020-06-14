@@ -47,6 +47,12 @@ describe('utils.test.js ', () => {
     expect(fen).toBe(expected);
   });
 
+  test('db should be coherent', () => {
+    testData.games.forEach((el) => {
+      expect(el.fen.length).toBe(el.nextMoves.length);
+    });
+  });
+
   test('Should fetchTips as white', () => {
     let currentGame = {
       fen: 'r2qkbnr/ppp2ppp/2np4/4p2b/2B1P3/2N2N1P/PPPP1PP1/R1BQK2R',
@@ -96,13 +102,13 @@ describe('utils.test.js ', () => {
 
     expect(tips.length).toBe(3);
     expect(links[0]).toBe(
-      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=522">Venus trap</a> : Kb3</li>'
+      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=522">Venus trap</a> : Nc3</li>'
     );
     expect(links[1]).toBe(
-      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=386">Mars trap</a> : Kb3</li>'
+      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=386">Mars trap</a> : Nc3</li>'
     );
     expect(links[2]).toBe(
-      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=67">Hercule trap</a> : Nb3</li>'
+      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=67">Hercule trap</a> : Nc3</li>'
     );
   });
 });

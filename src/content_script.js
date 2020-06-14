@@ -10,6 +10,10 @@ const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
 
+const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
+const sadSrc = brw.runtime.getURL('img/lichess_logo_500_sad.png');
+const happySrc = brw.runtime.getURL('img/lichess_logo_500.png');
+
 let DB = [];
 
 const gameSubject = new rx.BehaviorSubject();
@@ -55,11 +59,28 @@ function main() {
 function buildHtmlTips(currentGame) {
   const tips = Utils.fetchTips(currentGame, DB);
   console.log('=> tips found : ', tips.length);
-  let html = tips.length
-    ? '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
+  let html;
+  let backUrl;
+  if (tips.length) {
+    backUrl = happySrc;
+    html =
+      '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
       Utils.getListLinks(tips, currentGame.fen).join('') +
-      '</ul>'
-    : '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px"><span>No tips found :(</span> </div>';
+      '</ul>';
+  } else {
+    backUrl = sadSrc;
+    html =
+      '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px;">No tips found :(</div>';
+  }
+
+  const divContent = jQuery('.tips-content');
+  if (divContent) {
+    // eslint-disable-next-line quotes
+    divContent.css('background-image', "url('" + backUrl + "')");
+    divContent.css('background-size', '30%');
+    divContent.css('background-repeat', 'no-repeat');
+    divContent.css('background-position', 'center center');
+  }
 
   var today = new Date();
   var time =
@@ -92,7 +113,6 @@ function parsePieces() {
 }
 
 function insertTipTab() {
-  const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
   jQuery('.mchat__tabs.nb_2').append(
     '<div id="tips" class="mchat__tab tips"><span>Tips</span>' +
       '<img id="tips-wait" style="padding-left:3px;" src="' +
@@ -101,13 +121,13 @@ function insertTipTab() {
   );
 }
 
-const nbMoves = jQuery('.moves>m2').length;
-
 function monitorChange() {
   jQuery('.moves').on('DOMSubtreeModified', () => {
     console.log('monitor event');
     setTimeout(function () {
-      if (isMyTurn() && nbMoves !== jQuery('.moves>m2').length) updateGame();
+      if (isMyTurn() && nbMoves !== jQuery('.moves>m2').length) {
+        updateGame();
+      }
     }, 1000);
   });
 }

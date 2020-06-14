@@ -36,9 +36,13 @@ var utils = {
       };
     }
     var callback = null;
-    for (var i = injectDetailsArray.length - 1; i >= 0; --i)
+    for (var i = injectDetailsArray.length - 1; i >= 0; --i) {
       callback = createCallback(tabId, injectDetailsArray[i], callback);
-    if (callback !== null) callback(); // execute outermost function
+    }
+    if (callback !== null) {
+      // execute outermost function
+      callback();
+    }
   },
 
   calcIndex: (width, x) => {
