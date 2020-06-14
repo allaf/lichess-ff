@@ -31,12 +31,16 @@ const testData = {
     },
     {
       name: 'Venus trap',
-      fen: ['r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7'],
+      fen: [
+        'r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7',
+        'r1bqk2r/pppp1ppp/2n5/8/1bBPn3/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 8',
+      ],
+
       url: 'https://youtu.be/L-jTuKWJAG8?t=522',
-      nextMoves: ['Kb3'],
+      nextMoves: ['Nc3', "O-O"],
     },
     {
-      name: 'Mars trap',
+      name: "Mars trap",
       fen: [
         'xxxx w KQkq - 1 7',
         'r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7',

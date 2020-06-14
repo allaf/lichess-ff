@@ -11,8 +11,7 @@ var utils = {
     );
   },
   tipToHtml: (tip, gameFen) => {
-    const i = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
-
+    const moveIdx = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
     return (
       '<li><a target="_blank" href="' +
       tip.url +
@@ -20,7 +19,7 @@ var utils = {
       tip.name +
       '</a>' +
       ' : ' +
-      tip.nextMoves[i] +
+      tip.nextMoves[moveIdx] +
       '</li>'
     );
   },
