@@ -20,7 +20,7 @@
   "page_action": {
     "default_icon": "img/lichess_logo.png"
   },
-  "web_accessible_resources": ["img/"],
+  "web_accessible_resources": ["img/*"],
   "permissions": [
     "activeTab",
     "tabs",

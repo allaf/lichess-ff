@@ -7,11 +7,11 @@ const URL_ACCOUNT = 'https://lichess.org/api/account/playing';
 
 // eslint-disable-next-line no-unused-vars
 var apiUtils = {
-  getDistantDb: (apiKey) => 
+  getDistantDb: (apiKey, dbUrl) =>
     $.ajax({
       async: true,
       crossDomain: true,
-      url: 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db',
+      url: dbUrl,
       method: 'GET',
       headers: {
         'content-type': 'application/json',
@@ -43,3 +43,9 @@ var apiUtils = {
     );
   },
 };
+
+try {
+  module.exports = apiUtils;
+} catch (error) {
+  console.warn('moduel export failed', error);
+}

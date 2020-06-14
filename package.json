@@ -24,9 +24,15 @@
   },
   "homepage": "https://github.com/allaf/lichess-ff#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.10.2",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^26.0.1",
     "eslint": "^7.2.0",
+    "eslint-watch": "^7.0.0",
     "jest": "^26.0.1",
-    "eslint-watch": "^7.0.0"
+    "rxjs": "^6.5.5",
+    "web-ext": "^4.2.0"
   },
   "eslintConfig": {
     "overrides": [
@@ -36,7 +42,7 @@
         ],
         "excludedFiles": "*.test.js",
         "rules": {
-          "prefer-const":2,
+          "prefer-const": 2,
           "no-undef": 2,
           "no-shadow-restricted-names": 2,
           "no-unused-vars": 2,
@@ -50,7 +56,8 @@
     ],
     "parserOptions": {
       "ecmaVersion": 8,
-      "sourceType": "module"
+      "sourceType": "module",
+      "type": "module"
     },
     "env": {
       "node": true

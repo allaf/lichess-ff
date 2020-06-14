@@ -17,7 +17,7 @@ gameSubject.subscribe((game) => {
   if (game) {
     var tipsDiv = jQuery('.mchat__content.tips-content');
     if (tipsDiv) {
-      console.log('am updating the tips => ');
+      console.log('am updating the tips for new fen => ', game.fen);
       jQuery('#tips-wait').show();
       tipsDiv.html(buildHtmlTips(game));
       jQuery('#tips-wait').hide();
@@ -26,7 +26,7 @@ gameSubject.subscribe((game) => {
 });
 
 function main() {
-  insertHtmlTab();
+  insertTipTab();
 
   updateGame();
 
@@ -53,11 +53,11 @@ function main() {
 }
 
 function buildHtmlTips(currentGame) {
-  const tips = fetchTips(currentGame);
-  console.log('buildHtmlTips ====> tips found : ', tips.length);
+  const tips = Utils.fetchTips(currentGame, DB);
+  console.log('=> tips found : ', tips.length);
   let html = tips.length
     ? '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
-      getListLinks(tips) +
+      Utils.getListLinks(tips, currentGame.fen).join('') +
       '</ul>'
     : '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px"><span>No tips found :(</span> </div>';
 
@@ -65,10 +65,8 @@ function buildHtmlTips(currentGame) {
   var time =
     today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
 
-  const lastMove = jQuery('.moves > m2.active').text();
   html +=
-    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;">Last move : <strong>' +
-    lastMove +
+    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;"><strong>' +
     ' (' +
     time +
     ') </strong></span>';
@@ -93,26 +91,13 @@ function parsePieces() {
   return jsonPieces;
 }
 
-function getListLinks(gameList) {
-  return gameList
-    .map(
-      (g) =>
-        '<li><a href="' +
-        g.url +
-        '" >' +
-        g.name +
-        ' : ' +
-        g.nextMoves +
-        '</a></li>'
-    )
-    .join('');
-}
-
-function insertHtmlTab() {
-  // const waitImg = browser.runtime.getURL('img/ajax-loader.gif');
+function insertTipTab() {
+  const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
   jQuery('.mchat__tabs.nb_2').append(
     '<div id="tips" class="mchat__tab tips"><span>Tips</span>' +
-      '<span id="tips-wait" style="">...</span>'
+      '<img id="tips-wait" style="padding-left:3px;" src="' +
+      imgSrc +
+      '">'
   );
 }
 
@@ -120,9 +105,10 @@ const nbMoves = jQuery('.moves>m2').length;
 
 function monitorChange() {
   jQuery('.moves').on('DOMSubtreeModified', () => {
-    if (isMyTurn() && nbMoves !== jQuery('.moves>m2').length) {
-      updateGame();
-    }
+    console.log('monitor event');
+    setTimeout(function () {
+      if (isMyTurn() && nbMoves !== jQuery('.moves>m2').length) updateGame();
+    }, 1000);
   });
 }
 
@@ -133,8 +119,6 @@ function updateGame() {
   const fen = Utils.piecesIdxToFen(piecesWithIdx, gameSubject.getValue().color);
 
   const g = gameSubject.getValue();
-  console.log('current Fen', g.fen);
-  console.log('parsed  Fen', fen);
   console.log('nexting game');
   g.fen = fen;
   gameSubject.next(g);
@@ -147,17 +131,6 @@ function isMyTurn() {
     (myColor === 'white' && !(nbMoves % 2)) ||
     (myColor === 'black' && nbMoves % 2)
   );
-}
-
-function getDb() {
-  return DB;
-}
-
-function fetchTips(currentGame) {
-  // eslint-disable-next-line no-undef
-  return getDb()
-    .games.filter((g) => g.fen.split(' ')[0] === currentGame.fen)
-    .filter((g) => g.fen.split(' ')[1] === currentGame.color.substr(0, 1));
 }
 
 // eslint-disable-next-line no-undef

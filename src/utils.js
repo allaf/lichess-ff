@@ -1,4 +1,34 @@
 var utils = {
+  fetchTips: (currentGame, db) => {
+    // eslint-disable-next-line no-undef
+    return db.games.filter(
+      (game) =>
+        game.fen.filter(
+          (fen) =>
+            fen.split(' ')[0] === currentGame.fen &&
+            fen.split(' ')[1] === currentGame.color.substr(0, 1)
+        ).length
+    );
+  },
+  tipToHtml: (tip, gameFen) => {
+    const i = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
+
+    return (
+      '<li><a target="_blank" href="' +
+      tip.url +
+      '">' +
+      tip.name +
+      '</a>' +
+      ' : ' +
+      tip.nextMoves[i] +
+      '</li>'
+    );
+  },
+
+  getListLinks: function (tips, gameFen) {
+    return tips.map((t) => this.tipToHtml(t, gameFen), this);
+  },
+
   executeScripts: (tabId, injectDetailsArray) => {
     function createCallback(tabId, injectDetails, innerCallback) {
       return function () {
@@ -52,7 +82,7 @@ var utils = {
   },
 
   piecesIdxToFen(pieces, color = 'white') {
-    var board = [];
+    const board = [];
     for (var x = 0; x < 8; x++) {
       board[x] = new Array(8);
     }
@@ -67,15 +97,12 @@ var utils = {
     for (var i = 0; i < 8; i++) {
       fen += i === 0 ? '' : '/';
       count = 0;
-
       for (var j = 0; j < 8; j++) {
         const p = board[i][j];
-
         if (j === 7 && !p) {
           fen += count + 1;
           count = 0;
         }
-
         if (p) {
           if (count) {
             fen += count;

@@ -7,6 +7,7 @@ function saveOptions(e) {
   brw.storage.local.set({
     token: doc.querySelector('#token').value.trim(),
     apiKey: doc.querySelector('#apiKey').value.trim(),
+    restdb: doc.querySelector('#restdb').value.trim(),
   });
   e.preventDefault();
 }
@@ -16,6 +17,7 @@ function restoreOptions() {
   storage.then((res) => {
     doc.querySelector('#token').value = res.token ? res.token.trim() : '';
     doc.querySelector('#apiKey').value = res.apiKey ? res.apiKey.trim() : '';
+    doc.querySelector('#restdb').value = res.restdb ? res.restdb.trim() : '';
   });
 }
 

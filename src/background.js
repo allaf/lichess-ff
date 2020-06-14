@@ -1,12 +1,11 @@
 'use strict';
 
-//TODO mutliples fen per db entry
-
 console.log('background starts');
 
 // eslint-disable-next-line no-undef
 const brw = browser;
 
+const RESTBD_URL = 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db';
 const URL_MATCH = 'https://lichess.org/*';
 const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
 const FILE_RXJS = '/libs/rxjs.umd.min.js';
@@ -58,26 +57,34 @@ function displayWarningSettings(tabId, title) {
 brw.pageAction.onClicked.addListener((tabInfo) => {
   const local = brw.storage.local.get();
   local.then((storage) => {
-    if (!(storage.token && storage.apiKey)) {
-      displayWarningSettings(
-        tabInfo.id,
-        'You must set the token and api-key in the extension settings'
-      );
+    if (!storage.restdb) {
+      brw.storage.local.set({
+        restdb: RESTBD_URL,
+      });
+      console.log('SETTING RESTDB');
     }
-    if (storage.token && storage.apiKey)
+    if (!(storage.token && storage.apiKey && storage.restdb)) {
+      displayWarningSettings(tabInfo.id, 'You must setup the addon');
+    }
+    if (storage.token && storage.apiKey && storage.restdb)
       // eslint-disable-next-line no-undef
       apiUtils
         .getCurrentGame(tabInfo.url, storage.token)
         .subscribe((currentGame) => {
           if (currentGame) {
             // eslint-disable-next-line no-undef
-            apiUtils.getDistantDb(storage.apiKey).then((data) => {
-              console.log('DB fetched', data);
-              DB = data;
-              loadContentScript(tabInfo.id);
-            });
+            apiUtils
+              .getDistantDb(storage.apiKey, storage.restdb)
+              .then((data) => {
+                console.log('DB fetched', data);
+                DB = data;
+                loadContentScript(tabInfo.id);
+              });
           } else {
-            displayWarningSettings(tabInfo.id, 'No ongoing game or not on the right tab');
+            displayWarningSettings(
+              tabInfo.id,
+              'No ongoing game or not on the right tab'
+            );
           }
         });
   });
