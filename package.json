@@ -5,14 +5,14 @@
   "scripts": {
     "build": "web-ext build --overwrite-dest",
     "start": "web-ext run",
-    "web-ext-lint": "web-ext lint",
-    "lint": "eslint",
-    "lint-fix": "eslint --fix  ",
+    "updateDb": "cd ~/projets/majdb; npm run start",
     "lint-watch": "esw -w",
-    "test": "jest",
     "test:watch": "jest --watch",
+    "test": "jest",
+    "web-ext-lint": "web-ext lint",
+    "lint-fix": "eslint --fix  ",
     "clear": "jest --clearCache ",
-    "updateDb": "cd ~/projets/majdb; npm run start"
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",

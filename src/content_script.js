@@ -2,6 +2,8 @@
 
 console.log('content starts');
 
+// TODO  afficher formulaire avec liste des traps et 2 champs si url=analysis
+
 /* eslint-disable no-undef */
 const jQuery = $;
 const rx = rxjs;
@@ -10,9 +12,10 @@ const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
 
+const DELAY = 500;
 const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
-const sadSrc = brw.runtime.getURL('img/lichess_logo_500_sad.png');
-const happySrc = brw.runtime.getURL('img/lichess_logo_500.png');
+const sadHorsey = brw.runtime.getURL('img/lichess_logo_500_sad.png');
+const happyHorsey = brw.runtime.getURL('img/lichess_logo_500.png');
 
 let DB = [];
 
@@ -53,7 +56,7 @@ function main() {
   });
   jQuery('.mchat__tab.tips').click();
 
-  monitorChange();
+  monitorChange(DELAY);
 }
 
 function buildHtmlTips(currentGame) {
@@ -61,14 +64,16 @@ function buildHtmlTips(currentGame) {
   console.log('=> tips found : ', tips.length);
   let html;
   let backUrl;
+  let happy = false;
   if (tips.length) {
-    backUrl = happySrc;
+    happy = true;
+    backUrl = happyHorsey;
     html =
       '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
       Utils.getListLinks(tips, currentGame.fen).join('') +
       '</ul>';
   } else {
-    backUrl = sadSrc;
+    backUrl = sadHorsey;
     html =
       '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px;">No tips found :(</div>';
   }
@@ -80,6 +85,10 @@ function buildHtmlTips(currentGame) {
     divContent.css('background-size', '30%');
     divContent.css('background-repeat', 'no-repeat');
     divContent.css('background-position', 'center center');
+    if (happy) {
+      // TODO cleanup
+      // divContent.css('transform', 'rotateZ(90deg)');
+    }
   }
 
   var today = new Date();
@@ -92,6 +101,13 @@ function buildHtmlTips(currentGame) {
     time +
     ') </strong></span>';
   return html;
+}
+
+function boardToFen() {
+  const pieces = parsePieces();
+  const width = jQuery('cg-container').innerWidth();
+  const piecesWithIdx = Utils.pieceTranslationToPos(width, pieces);
+  return Utils.piecesIdxToFen(piecesWithIdx, gameSubject.getValue().color);
 }
 
 function parsePieces() {
@@ -121,27 +137,25 @@ function insertTipTab() {
   );
 }
 
-function monitorChange() {
+function monitorChange(delay = 1000) {
   jQuery('.moves').on('DOMSubtreeModified', () => {
     console.log('monitor event');
     setTimeout(function () {
-      if (isMyTurn() && nbMoves !== jQuery('.moves>m2').length) {
+      if (isMyTurn() /*&& nbMoves !== jQuery('.moves>m2').length*/) {
         updateGame();
       }
-    }, 1000);
+    }, delay);
   });
 }
 
 function updateGame() {
-  const pieces = parsePieces();
-  const width = jQuery('cg-container').innerWidth();
-  const piecesWithIdx = Utils.pieceTranslationToPos(width, pieces);
-  const fen = Utils.piecesIdxToFen(piecesWithIdx, gameSubject.getValue().color);
+  const fen = boardToFen();
+  console.log('Fen extracted from html : ', fen);
 
-  const g = gameSubject.getValue();
+  const game = gameSubject.getValue();
   console.log('nexting game');
-  g.fen = fen;
-  gameSubject.next(g);
+  game.fen = fen;
+  gameSubject.next(game);
 }
 
 function isMyTurn() {
@@ -159,11 +173,10 @@ jQuery(document).ready(function () {
     if (storage.token) {
       ApiUtils
         // eslint-disable-next-line no-undef
-        .getCurrentGame(window.location.href, storage.token)
+        .getCurrentGameForUrl(window.location.href, storage.token) //TODO redondant ?
         .subscribe((g) => {
           brw.runtime.sendMessage('get-data').then((reply) => {
             DB = reply;
-            console.log('DB recup', DB);
             gameSubject.next(g);
             main();
           });

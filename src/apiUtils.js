@@ -20,7 +20,7 @@ var apiUtils = {
       },
     }),
 
-  getCurrentGame: (currentUrl, token) => {
+  getCurrentGameForUrl: (currentUrl, token) => {
     return from(
       fetch(URL_ACCOUNT, {
         method: 'get',
@@ -42,10 +42,18 @@ var apiUtils = {
       map((g) => g.filter((x) => currentUrl.includes(x.gameId))[0])
     );
   },
+
+  delayObs: (dataArray, ms, callback) => {
+    from(dataArray)
+      .pipe(concatMap((item) => of(item).pipe(delay(ms))))
+      .subscribe((e) => {
+        callback(e);
+      });
+  },
 };
 
 try {
   module.exports = apiUtils;
 } catch (error) {
-  console.warn('moduel export failed', error);
+  console.warn('module export failed', error);
 }

@@ -2,8 +2,30 @@
 
 const testData = require('./data');
 const utils = require('../src/utils');
+const { games } = require('./data');
 
 describe('utils.test.js ', () => {
+  test('Should check isOnAnalysisPage()', () => {
+    expect(
+      utils.isOnAnalysisPage('https://mail.google.com/mail/u/0/#inbox')
+    ).toBeFalsy();
+    expect(
+      utils.isOnAnalysisPage('https://mail.google.com/analysis')
+    ).toBeFalsy();
+    expect(utils.isOnAnalysisPage('https://lichess.org/ePK1JEZ6')).toBeFalsy();
+
+    expect(utils.isOnAnalysisPage('https://lichess.org/analysis')).toBeTruthy();
+    expect(
+      utils.isOnAnalysisPage('https://lichess.org/analysis/kingOfTheHill')
+    ).toBeTruthy();
+    expect(
+      utils.isOnAnalysisPage('https://lichess.org/analysis/horde')
+    ).toBeTruthy();
+    expect(
+      utils.isOnAnalysisPage('https://lichess.org/analysis/standard#1')
+    ).toBeTruthy();
+  });
+
   test('pieceTranslationToPos', () => {
     let res = utils.pieceTranslationToPos(398.533, testData.pieces1);
 
@@ -110,5 +132,27 @@ describe('utils.test.js ', () => {
     expect(links[2]).toBe(
       '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=67">Hercule trap</a> : Nc3</li>'
     );
+  });
+
+  test('Study pgn parse chapter', () => {
+    let res = utils.parseChapters(testData.studyPgn);
+    expect(res).toEqual([
+      {
+        name: 'Introduction',
+        val: 'https://lichess.org/study/nsIdXAP4/dTh2YVca',
+      },
+      {
+        name: 'Kostic trap',
+        val: 'https://lichess.org/study/nsIdXAP4/pcltmSpW',
+      },
+      {
+        name: 'Fishing Pole trap',
+        val: 'https://lichess.org/study/nsIdXAP4/HDfsRKmI',
+      },
+      {
+        name: 'Center Game Trap 2: Black',
+        val: 'https://lichess.org/study/nsIdXAP4/SqyV0896',
+      },
+    ]);
   });
 });

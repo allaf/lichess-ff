@@ -1,0 +1,58 @@
+.tipsDivAnalysis {
+  background-color: #262421;
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.marginL {
+  margin-left: 1em;
+}
+
+h2 {
+  margin-bottom: 1.3rem;
+  font-size: 1.3em;
+  text-align: center;
+}
+
+.divAdd,
+.divUpd {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.divAdd {
+  margin-top: 0;
+}
+
+.inputLine {
+  margin: 0.4em 0;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+}
+
+.inputLine label {
+  flex: 0 0 8ch;
+  font-weight: bold;
+}
+
+/* .inputLine input { */
+/* flex: 1 1 auto; */
+/* } */
+
+.divBt {
+  align-items: center;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.divBt a {
+  border-radius: 3px 3px 3px 3px;
+  background: #73533b;
+}

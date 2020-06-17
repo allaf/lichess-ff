@@ -1,4 +1,8 @@
 var utils = {
+  isOnAnalysisPage: (url) => {
+    return url.match(/https:\/\/.*lichess\.org\/analysis/);
+  },
+
   fetchTips: (currentGame, db) => {
     // eslint-disable-next-line no-undef
     return db.games.filter(
@@ -84,7 +88,7 @@ var utils = {
     return p.color === 'white' ? res.toUpperCase() : res;
   },
 
-  piecesIdxToFen(pieces, color = 'white') {
+  piecesIdxToFen: (pieces, color = 'white') => {
     const board = [];
     for (var x = 0; x < 8; x++) {
       board[x] = new Array(8);
@@ -111,7 +115,7 @@ var utils = {
             fen += count;
             count = 0;
           }
-          fen += this.pieceToFen(p);
+          fen += utils.pieceToFen(p);
         } else {
           count++;
         }
@@ -119,10 +123,25 @@ var utils = {
     }
     return color === 'black' ? fen.split('').reverse().join('') : fen;
   },
+  purge: (str) => {
+    return str.replace(/[\s`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+  },
+  parseChapters: (x) => {
+    const regexpEvent = /\[Event "[^:]*: (.*)"\]/gm;
+    const regexpSite = /\[Site "(https:\/\/lichess\.org\/study\/.*)"]/gm;
+    const matchesEvent = [...x.matchAll(regexpEvent)];
+    const matchesSite = [...x.matchAll(regexpSite)];
+
+    const mapped = matchesEvent.map((x, i) => {
+      return { name: x[1], val: matchesSite[i][1] };
+    });
+
+    return mapped;
+  },
 };
 
 try {
   module.exports = utils;
 } catch (error) {
-  console.warn('moduel export failed', error);
+  console.warn('module export failed', error);
 }

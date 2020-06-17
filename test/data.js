@@ -1,6 +1,25 @@
-// eslint-disable-next-line no-unused-vars
 const testData = {
   games: [
+    {
+      id: 'dev',
+      name: 'dev tip',
+      fen: [],
+      url: 'xxx',
+      nextMoves: [],
+    },
+    {
+      id: 'kostic',
+      name: 'Kostic trap',
+      fen: [
+        'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1',
+        'rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2',
+        'r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3',
+        'r1b1kbnr/pppp1Npp/8/6q1/2BnP3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5',
+        'r1b1kbnr/pppp1Npp/8/8/2BnP3/8/PPPP1PqP/RNBQKR2 b Qkq - 1 6',
+      ],
+      url: 'https://lichess.org/study/nsIdXAP4',
+      nextMoves: ['e5', 'Nc6', 'Nd4', 'Qxg2', 'Qxe4+'],
+    },
     {
       id: 'tenisson',
       name: 'Tennison Gambit (scandi as white)',
@@ -160,11 +179,12 @@ const testData = {
       // eslint-disable-next-line quotes
       name: "Legal's trap",
       fen: [
+        'r2qkbnr/ppp2ppp/2np4/4p3/2B1P1b1/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 5 4',
         'r2qkbnr/ppp2ppp/2np4/4p2b/2B1P3/2N2N1P/PPPP1PP1/R1BQK2R w KQkq - 1 6',
         'r2qkbnr/ppp2ppp/2np4/4N3/2B1P3/2N4P/PPPP1PP1/R1BbK2R w KQkq - 1 6',
       ],
       url: 'https://youtu.be/tYOnym3ZINU?t=71',
-      nextMoves: ['Nxe5', 'Bxf7+'],
+      nextMoves: ['h3', 'Nxe5', 'Bxf7+'],
     },
     {
       id: 'bsg',
@@ -1240,6 +1260,106 @@ const testData = {
       },
     },
   ],
+
+  studyPgn: `[Event "🍄 Best Opening Traps 2020 🍄: Introduction"]
+  [Site "https://lichess.org/study/nsIdXAP4/dTh2YVca"]
+  [Result "*"]
+  [UTCDate "2020.05.30"]
+  [UTCTime "08:26:39"]
+  [Variant "Standard"]
+  [ECO "?"]
+  [Opening "?"]
+  [Annotator "https://lichess.org/@/SuperChessBud"]
+  
+  { Hello all and Welcome to the another study of best opening traps, but today I am making study for year 2020. As I said I will make serie of Opening trap studies with games and fun and cool traps. I hope you will enjoy and you will click following heart button under the h1 square. You can see the first study from last year: https://lichess.org/study/OcvooNXz 1046 likes on that study, thanks everybody!!!! }
+   *
+  
+  
+  [Event "🍄 Best Opening Traps 2020 🍄: Kostic trap"]
+  [Site "https://lichess.org/study/nsIdXAP4/pcltmSpW"]
+  [Result "*"]
+  [UTCDate "2020.05.30"]
+  [UTCTime "08:31:07"]
+  [Variant "Standard"]
+  [ECO "C50"]
+  [Opening "Italian Game: Schilling-Kostic Gambit"]
+  [Annotator "https://lichess.org/@/SuperChessBud"]
+  
+  { First we are going to see one of the most popular traps called: Kostic Trap }
+  1. e4 e5 2. Nf3 Nc6 3. Bc4 Nd4 4. Nxe5? Qg5 { [%csl Rg2,Re5][%cal Rg5e5,Rg5g2] } 5. Nxf7?? { Looks like white has double attack, but he was losing the queen. } (5. Bxf7+ $17 { Better move, but black was still better }) 5... Qxg2 { [%cal Rg2h1,Rg2e4] } 6. Rf1 Qxe4+ { And king was trapped and white has to give queen. } { [%csl Re1] } 7. Qe2 (7. Be2 Nf3# { On Be2 there was fantastical mate. } { [%csl Re1,Re2,Rd1,Rf1,Rf2,Rd2][%cal Re4e1,Rf3e1] }) *
+  
+  
+  [Event "Rated Bullet game"]
+  [Site "https://lichess.org/DHrycp1Y"]
+  [Date "2020.05.29"]
+  [Round "-"]
+  [White "PegaRei"]
+  [Black "keywest"]
+  [Result "0-1"]
+  [WhiteElo "1637"]
+  [BlackElo "1590"]
+  [TimeControl "60+0"]
+  [Termination "Normal"]
+  [UTCDate "2020.05.30"]
+  [UTCTime "08:36:41"]
+  [Variant "Standard"]
+  [ECO "C50"]
+  [Opening "Blackburne Shilling Gambit"]
+  [Annotator "https://lichess.org/@/SuperChessBud"]
+  
+  1. e4 { [%clk 0:01:00] } e5 { [%clk 0:01:00] } 2. Nf3 { [%clk 0:00:58] } Nc6 { [%clk 0:01:00] } 3. Bc4 { [%clk 0:00:58] } Nd4 { [%clk 0:00:59] } 4. Nxe5 { [%clk 0:00:56] } Qg5 { [%clk 0:00:58] } 5. Nxf7 { [%clk 0:00:52] } (5. Bxf7+ Kd8 6. O-O Qxe5 7. c3 Ne6 8. Bxe6 Qxe6) 5... Qxg2 { [%clk 0:00:56] } 6. Rf1 { [%clk 0:00:51] } Qxe4+ { [%clk 0:00:55] } 7. Be2 { [%clk 0:00:50] } Nf3# { 0-1 Black wins by checkmate. } { [%clk 0:00:54] } 0-1
+  
+  
+  [Event "🍄 Best Opening Traps 2020 🍄: Fishing Pole trap"]
+  [Site "https://lichess.org/study/nsIdXAP4/HDfsRKmI"]
+  [Result "*"]
+  [UTCDate "2020.05.30"]
+  [UTCTime "08:37:40"]
+  [Variant "Standard"]
+  [ECO "C65"]
+  [Opening "Ruy Lopez: Berlin Defense, Fishing Pole Variation"]
+  [Annotator "https://lichess.org/@/SuperChessBud"]
+  
+  { There was a popular trap in Ruy Lopez! }
+  1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Ng4 5. h3 h5 6. hxg4?? hxg4 7. Ne1?? Qh4 8. f4 g3 9. Qh5 Rxh5 10. a3 { [%csl Rg1,Gg3,Gh5,Gh4,Rf1,Re1,Rg2][%cal Gh4h2,Gh4h1] } 10... Qh1# *
+  
+  
+  [Event "Rated Rapid game"]
+  [Site "https://lichess.org/3dcBXd3F"]
+  [Date "2017.02.26"]
+  [Round "-"]
+  [White "Nikola89"]
+  [Black "Ocdman"]
+  [Result "0-1"]
+  [WhiteElo "1950"]
+  [BlackElo "1869"]
+  [TimeControl "600+0"]
+  [Termination "Normal"]
+  [UTCDate "2020.05.30"]
+  [UTCTime "08:40:39"]
+  [Variant "Standard"]
+  [ECO "C65"]
+  [Opening "Ruy Lopez: Berlin Defense, Fishing Pole Variation"]
+  [Annotator "https://lichess.org/@/SuperChessBud"]
+  
+  1. e4 e5 2. Nf3 Nc6 3. Bb5 Nf6 4. O-O Ng4 5. h3 h5 6. hxg4 hxg4 7. Ne1 Qh4 8. f4 g3 { 0-1 White resigns. } 0-1
+
+
+  [Event "🍄 Best Opening Traps 2020 🍄: Center Game Trap 2: Black"]
+  [Site "https://lichess.org/study/nsIdXAP4/SqyV0896"]
+  [Result "*"]
+  [UTCDate "2020.06.01"]
+  [UTCTime "10:42:47"]
+  [Variant "Standard"]
+  [ECO "C22"]
+  [Opening "Center Game: Berger Variation"]
+  [Annotator "https://lichess.org/@/SuperChessBud"]
+  
+  1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qe3 Nf6 5. Bc4 Ne5 6. Bb3 Bb4+ 7. c3? (7. Bd2 $10) 7... Bc5 8. Qxc5?? (8. Qg3?? Bxf2+! 9. Qxf2 (9. Kxf2 Nxe4+ 10. Ke2 Nxg3+ 11. hxg3) 9... Nd3+ 10. Ke2 Nxf2 11. Kxf2) 8... Nd3+! 9. Kf1 Nxc5 *
+  
+  
+  
+  `,
 };
 
 try {
