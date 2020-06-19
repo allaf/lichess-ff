@@ -12,6 +12,7 @@ module.exports = {
     ecmaVersion: 11,
   },
   rules: {
+    // 'no-console': 1,
     curly: 2,
     eqeqeq: 2,
     'prefer-const': 2,

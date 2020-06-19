@@ -127,6 +127,8 @@ brw.pageAction.onClicked.addListener((tabInfo) => {
       TOKEN = storage.token;
       APIKEY = storage.apiKey;
       RESTDB = storage.restdb;
+      settingsRequest.headers['x-apikey'] = APIKEY;
+
       if (Utils.isOnAnalysisPage(tabInfo.url)) {
         // User on analysis page
         loadContentAnalysis(tabInfo.id, APIKEY, RESTDB);
@@ -173,7 +175,6 @@ function postTip(tip) {
   var settings = Object.assign({}, settingsRequest);
   settings.method = 'POST';
   settings.data = JSON.stringify(tip);
-  settings['x-apikey'] = APIKEY;
   return jQuery.ajax(settings); //TODO why not in contentscript ?
 }
 
@@ -181,7 +182,6 @@ function getTip(_id) {
   var settings = Object.assign({}, settingsRequest);
   settings.method = 'GET';
   settings.url = RESTBD_URL + '/' + _id;
-  settings['x-apikey'] = APIKEY;
   return jQuery.ajax(settings);
 }
 
@@ -189,7 +189,6 @@ function updateTip(obj, tipData) {
   var settings = Object.assign({}, settingsRequest);
   settings.method = 'PUT';
   settings.url = RESTBD_URL + '/' + obj._id;
-  settings['x-apikey'] = APIKEY;
   settings.data = JSON.stringify({
     nextMoves: obj.nextMoves.concat(tipData.move),
     fen: obj.fen.concat(tipData.fen),

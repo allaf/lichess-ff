@@ -1,14 +1,6 @@
 const testData = {
   games: [
     {
-      id: 'dev',
-      name: 'dev tip',
-      fen: [],
-      url: 'xxx',
-      nextMoves: [],
-      variant: 'Standard',
-    },
-    {
       id: 'kostic',
       name: 'Kostic trap',
       fen: [
@@ -198,7 +190,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'bsg',
-      name: 'Blackburne Shilling Gambit ',
+      name: 'Blackburne Shilling Gambit w',
       fen: ['r1bqkbnr/pppp1ppp/8/4p3/2BnP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4'],
       url: 'https://youtu.be/tYOnym3ZINU?t=126',
       nextMoves: ['Nd4'],
@@ -206,7 +198,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'gevans1',
-      name: 'Gambit Evans 1 Ba5',
+      name: 'Gambit Evans 1 Ba5 w',
       fen: [
         'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4',
       ],
@@ -216,7 +208,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'gevans2',
-      name: 'Gambit Evans 2',
+      name: 'Gambit Evans 2 w',
       fen: ['r1b1k2r/ppppqppp/2n2n2/b7/2B1P3/1QN2N2/P4PPP/R1B2RK1 w kq - 1 10'],
       url: 'https://youtu.be/WbQ35VtsXys?t=71',
       nextMoves: ['Nd5'],
@@ -224,7 +216,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'gevans3',
-      name: 'Gambit Evans (piège Bobby Fischer)',
+      name: 'Gambit Evans (piège Bobby Fischer) w',
       fen: ['r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQK2R w KQkq - 0 7'],
       url: 'https://youtu.be/rOe8lcOFhCI?t=79',
       nextMoves: ['O-O'],
@@ -232,7 +224,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'gevans4',
-      name: 'Gambit Evans (piège Fly in the ointment)',
+      name: 'Gambit Evans (piège Fly in the ointment) w',
       fen: ['r1b1k1nr/ppppqppp/2n5/b7/2B1P3/1Qp2N2/P4PPP/RNB2RK1 w kq - 2 9'],
       url: 'https://youtu.be/0ha5ggCwA6w?t=53',
       nextMoves: ['Nxc3'],
@@ -241,7 +233,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'rosen1',
-      name: 'Scandi Rosen Trap',
+      name: 'Scandi Rosen Trap w',
       fen: ['rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4'],
       url: 'https://youtu.be/6IBDe-f_PCc?t=1764',
       nextMoves: ['b4'],
@@ -249,7 +241,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'rosen2',
-      name: 'Scandi Rosen Trap2',
+      name: 'Scandi Rosen Trap2 w',
       fen: ['rn1qkb1r/ppp1pppp/5n2/3P4/2B3b1/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4'],
       url: 'https://youtu.be/6IBDe-f_PCc?t=1906',
       nextMoves: ['f3'],
@@ -267,7 +259,7 @@ const testData = {
     {
       variant: 'Standard',
       id: 'milnerbarry',
-      name: 'French, advance, just a pawnMilner-Barry gambit',
+      name: 'French, advance, just a pawn Milner-Barry gambit',
       fen: [
         'r2qkbnr/pp1b1ppp/2n1p3/1BppP3/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 4 6',
       ],

@@ -2,7 +2,7 @@
 
 console.log('content analysis starts');
 
-//TODO bug parsing chapter for CQhQn8Kg
+//TODO bug parsing chapter for CQhQn8Kg 3SBPV7cO (MB double)
 
 /* eslint-disable no-undef */
 const jQuery = $;
@@ -163,7 +163,6 @@ function createTipForm() {
     'submit button text confirm button-blue',
     'O'
   ).click(() => {
-    console.log('click on btAddOnePos');
     var _id = jQuery('#selectTip').val();
     var fen = jQuery('.analyse__underboard__fen').val();
     const activeMove = jQuery('#inputMove').val();
@@ -323,7 +322,7 @@ function sendMsgAddTip(fenList, moveList) {
   const name = jQuery('#inputTitle').val();
   const url = jQuery('#inputUrl').val();
   const variant = getVariant();
-  if (name && url && variant) {
+  if (!!name && !!url && !!variant) {
     return brw.runtime.sendMessage({
       id: 'add-tip',
       trap: {
