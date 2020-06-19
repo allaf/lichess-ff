@@ -2,8 +2,6 @@
 
 console.log('content starts');
 
-// TODO  afficher formulaire avec liste des traps et 2 champs si url=analysis
-
 /* eslint-disable no-undef */
 const jQuery = $;
 const rx = rxjs;
@@ -12,7 +10,7 @@ const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
 
-const DELAY = 500;
+const DELAY_MONITOR = 2000;
 const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
 const sadHorsey = brw.runtime.getURL('img/lichess_logo_500_sad.png');
 const happyHorsey = brw.runtime.getURL('img/lichess_logo_500.png');
@@ -22,6 +20,8 @@ let DB = [];
 const gameSubject = new rx.BehaviorSubject();
 gameSubject.subscribe((game) => {
   if (game) {
+    console.log('SUBJ SUB', game);
+
     var tipsDiv = jQuery('.mchat__content.tips-content');
     if (tipsDiv) {
       console.log('am updating the tips for new fen => ', game.fen);
@@ -33,6 +33,8 @@ gameSubject.subscribe((game) => {
 });
 
 function main() {
+  monitorChange(DELAY_MONITOR);
+
   insertTipTab();
 
   updateGame();
@@ -55,8 +57,6 @@ function main() {
     }
   });
   jQuery('.mchat__tab.tips').click();
-
-  monitorChange(DELAY);
 }
 
 function buildHtmlTips(currentGame) {
@@ -86,8 +86,6 @@ function buildHtmlTips(currentGame) {
     divContent.css('background-repeat', 'no-repeat');
     divContent.css('background-position', 'center center');
     if (happy) {
-      // TODO cleanup
-      // divContent.css('transform', 'rotateZ(90deg)');
     }
   }
 
@@ -129,19 +127,24 @@ function parsePieces() {
 }
 
 function insertTipTab() {
-  jQuery('.mchat__tabs.nb_2').append(
-    '<div id="tips" class="mchat__tab tips"><span>Tips</span>' +
-      '<img id="tips-wait" style="padding-left:3px;" src="' +
-      imgSrc +
-      '">'
-  );
+  const btClass = 'fbt';
+  jQuery('.mchat__tabs.nb_2').append(`
+    <div id="tips" class="mchat__tab tips"><span>Tips</span>
+      <button id="tips-refresh" data-icon="P" class="${btClass}"></button>
+      <img id="tips-wait" style="padding-left:3px;" src="${imgSrc}">
+    </div>
+    `);
+
+  jQuery('#tips-refresh').click(() => {
+    updateGame();
+  });
 }
 
 function monitorChange(delay = 1000) {
-  jQuery('.moves').on('DOMSubtreeModified', () => {
+  jQuery('.rmoves').on('DOMSubtreeModified', () => {
     console.log('monitor event');
     setTimeout(function () {
-      if (isMyTurn() /*&& nbMoves !== jQuery('.moves>m2').length*/) {
+      if (isMyTurn()) {
         updateGame();
       }
     }, delay);
@@ -151,6 +154,10 @@ function monitorChange(delay = 1000) {
 function updateGame() {
   const fen = boardToFen();
   console.log('Fen extracted from html : ', fen);
+  if (fen.includes('a')) {
+    console.error('BAD FEN, please manually reload');
+    return;
+  }
 
   const game = gameSubject.getValue();
   console.log('nexting game');
@@ -167,21 +174,18 @@ function isMyTurn() {
   );
 }
 
-// eslint-disable-next-line no-undef
 jQuery(document).ready(function () {
   brw.storage.local.get('token').then((storage) => {
-    if (storage.token) {
-      ApiUtils
-        // eslint-disable-next-line no-undef
-        .getCurrentGameForUrl(window.location.href, storage.token) //TODO redondant ?
-        .subscribe((g) => {
-          brw.runtime.sendMessage('get-data').then((reply) => {
-            DB = reply;
-            gameSubject.next(g);
-            main();
-          });
-        });
-    }
+    ApiUtils.getCurrentGameForUrl(
+      window.location.href,
+      storage.token
+    ).subscribe((g) => {
+      brw.runtime.sendMessage('get-data').then((reply) => {
+        DB = reply;
+        gameSubject.next(g);
+        main();
+      });
+    });
   });
 });
 

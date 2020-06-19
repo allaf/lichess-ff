@@ -9,6 +9,12 @@ const Utils = utils;
 const jQuery = $;
 /* eslint-enable no-undef */
 
+//TODO Base avec tuples
+
+let TOKEN;
+let APIKEY;
+let RESTDB;
+
 const RESTBD_URL = 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db';
 const URL_MATCH = 'https://lichess.org/*';
 const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
@@ -18,34 +24,18 @@ const FILE_API_UTILS = '/src/apiUtils.js';
 const FILE_CONTENT_SCRIPT = '/src/content_script.js';
 const FILE_CONTENT_SCRIPT_ANALYSIS = '/src/content_script_analysis.js';
 
-var settingsPut = {
+var settingsRequest = {
   async: true,
   crossDomain: true,
-  url: 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db',
+  url: RESTBD_URL,
   method: 'PUT',
   headers: {
     'content-type': 'application/json',
-    'x-apikey': '5ee2fc464e6043315b0af9f4',
+    'x-apikey': '',
     'cache-control': 'no-cache',
   },
   processData: false,
 };
-
-var settingsPost = {
-  async: true,
-  crossDomain: true,
-  url: 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db',
-  method: 'POST',
-  headers: {
-    'content-type': 'application/json',
-    'x-apikey': '5ee2fc464e6043315b0af9f4',
-    'cache-control': 'no-cache',
-  },
-  processData: false,
-};
-
-var settingsGet = Object.assign({}, settingsPut);
-settingsGet.method = 'GET';
 
 let DB = [];
 
@@ -96,7 +86,6 @@ function loadContentAnalysis(tabId, apiKey, restdb) {
       { file: FILE_JQUERY },
       { file: FILE_RXJS },
       { file: FILE_UTILS },
-      { file: FILE_API_UTILS },
       { file: FILE_CONTENT_SCRIPT_ANALYSIS },
     ]);
     brw.tabs.insertCSS(tabId, { file: '/src/css/analysis.css' }).then(() => {
@@ -130,18 +119,20 @@ brw.pageAction.onClicked.addListener((tabInfo) => {
       brw.storage.local.set({
         restdb: RESTBD_URL,
       });
-      console.log('SETTING RESTDB');
     }
     if (!(storage.token && storage.apiKey && storage.restdb)) {
       displayWarningSettings(tabInfo.id, 'You must setup the addon');
     }
     if (storage.token && storage.apiKey && storage.restdb) {
+      TOKEN = storage.token;
+      APIKEY = storage.apiKey;
+      RESTDB = storage.restdb;
       if (Utils.isOnAnalysisPage(tabInfo.url)) {
-        console.log('on analysis page');
-        loadContentAnalysis(tabInfo.id, storage.apiKey, storage.restdb);
+        // User on analysis page
+        loadContentAnalysis(tabInfo.id, APIKEY, RESTDB);
       } else {
-        // on game page
-        loadContentGame(tabInfo, storage.token, storage.apiKey, storage.restdb);
+        // User on game page
+        loadContentGame(tabInfo, TOKEN, APIKEY, RESTDB);
       }
     }
   });
@@ -152,10 +143,13 @@ brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
     sendReply({
       games: DB,
     });
+  } else if (msg === 'get-data-refetch') {
+    ApiUtils.getDistantDb(APIKEY, RESTDB).then((data) => {
+      DB = data;
+      brw.tabs.sendMessage(sender.tab.id, { id: 'get-data-refetch', db: data });
+    });
   } else if (msg.id === 'update-tip') {
-    // refreshDb()
     getTip(msg.tip._id).done((resp) => {
-      console.log('got the tip from db', resp);
       updateTip(resp, msg.tip)
         .done((updDone) => {
           console.log('upload done ', updDone);
@@ -165,8 +159,6 @@ brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
         });
     });
   } else if (msg.id === 'add-tip') {
-    console.log('THE TRAP TO ADD', msg.trap);
-    // let trap = {fen:msg.trap};
     postTip(msg.trap)
       .done((postRes) => {
         console.log('post done ', postRes);
@@ -174,28 +166,30 @@ brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
       .fail(() => {
         console.error('post tip failed');
       });
-    // sendReply(msg.trap);
   }
 });
 
 function postTip(tip) {
-  console.log('postTip');
-  var settings = Object.assign({}, settingsPost);
+  var settings = Object.assign({}, settingsRequest);
+  settings.method = 'POST';
   settings.data = JSON.stringify(tip);
-  return jQuery.ajax(settings); //TODO why not in contentscript ??
+  settings['x-apikey'] = APIKEY;
+  return jQuery.ajax(settings); //TODO why not in contentscript ?
 }
 
 function getTip(_id) {
-  var settings = Object.assign({}, settingsGet);
-  settings.url = 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db/' + _id; //TODO const
+  var settings = Object.assign({}, settingsRequest);
+  settings.method = 'GET';
+  settings.url = RESTBD_URL + '/' + _id;
+  settings['x-apikey'] = APIKEY;
   return jQuery.ajax(settings);
 }
 
 function updateTip(obj, tipData) {
-  console.log('updateTip');
-  var settings = Object.assign({}, settingsPut);
-  settings.url =
-    'https://chesstips-02ee.restdb.io/rest/lichess-ff-db/' + obj._id; //TODO const
+  var settings = Object.assign({}, settingsRequest);
+  settings.method = 'PUT';
+  settings.url = RESTBD_URL + '/' + obj._id;
+  settings['x-apikey'] = APIKEY;
   settings.data = JSON.stringify({
     nextMoves: obj.nextMoves.concat(tipData.move),
     fen: obj.fen.concat(tipData.fen),

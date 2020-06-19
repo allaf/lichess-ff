@@ -6,6 +6,7 @@ const testData = {
       fen: [],
       url: 'xxx',
       nextMoves: [],
+      variant: 'Standard',
     },
     {
       id: 'kostic',
@@ -19,6 +20,7 @@ const testData = {
       ],
       url: 'https://lichess.org/study/nsIdXAP4',
       nextMoves: ['e5', 'Nc6', 'Nd4', 'Qxg2', 'Qxe4+'],
+      variant: 'Standard',
     },
     {
       id: 'tenisson',
@@ -34,6 +36,7 @@ const testData = {
       ],
       url: 'https://youtu.be/XZtVxicqkAs?t=99',
       nextMoves: ['Nf3', 'Ng5', 'd3', 'Bxd3', 'Nxf7', 'Bg6+', 'Qxd8'],
+      variant: 'Standard',
     },
     {
       id: 'englund',
@@ -49,8 +52,10 @@ const testData = {
       ],
       url: 'https://youtu.be/tYOnym3ZINU?t=475',
       nextMoves: ['e5', 'Nc6', 'Qe7', 'Qe7', 'Qb4+', 'Qxb2', 'Bb4'],
+      variant: 'Standard',
     },
     {
+      variant: 'Standard',
       id: 'venus',
       name: 'Venus trap',
       fen: [
@@ -84,6 +89,7 @@ const testData = {
       ],
     },
     {
+      variant: 'Standard',
       id: 'mars',
       name: 'Mars trap',
       fen: [
@@ -119,6 +125,7 @@ const testData = {
       ],
     },
     {
+      variant: 'Standard',
       id: 'hercule',
       name: 'Hercule trap',
       fen: [
@@ -164,6 +171,7 @@ const testData = {
       ],
     },
     {
+      variant: 'Standard',
       id: 'it1',
       name: 'Italienne débutant trap',
       fen: [
@@ -175,6 +183,7 @@ const testData = {
       nextMoves: ['d4', 'dxe', 'Qd5'],
     },
     {
+      variant: 'Standard',
       id: 'legal',
       // eslint-disable-next-line quotes
       name: "Legal's trap",
@@ -187,6 +196,7 @@ const testData = {
       nextMoves: ['h3', 'Nxe5', 'Bxf7+'],
     },
     {
+      variant: 'Standard',
       id: 'bsg',
       name: 'Blackburne Shilling Gambit ',
       fen: ['r1bqkbnr/pppp1ppp/8/4p3/2BnP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4'],
@@ -194,6 +204,7 @@ const testData = {
       nextMoves: ['Nd4'],
     },
     {
+      variant: 'Standard',
       id: 'gevans1',
       name: 'Gambit Evans 1 Ba5',
       fen: [
@@ -203,6 +214,7 @@ const testData = {
       nextMoves: ['b4'],
     },
     {
+      variant: 'Standard',
       id: 'gevans2',
       name: 'Gambit Evans 2',
       fen: ['r1b1k2r/ppppqppp/2n2n2/b7/2B1P3/1QN2N2/P4PPP/R1B2RK1 w kq - 1 10'],
@@ -210,6 +222,7 @@ const testData = {
       nextMoves: ['Nd5'],
     },
     {
+      variant: 'Standard',
       id: 'gevans3',
       name: 'Gambit Evans (piège Bobby Fischer)',
       fen: ['r1bqk1nr/pppp1ppp/2n5/b7/2BpP3/2P2N2/P4PPP/RNBQK2R w KQkq - 0 7'],
@@ -217,6 +230,7 @@ const testData = {
       nextMoves: ['O-O'],
     },
     {
+      variant: 'Standard',
       id: 'gevans4',
       name: 'Gambit Evans (piège Fly in the ointment)',
       fen: ['r1b1k1nr/ppppqppp/2n5/b7/2B1P3/1Qp2N2/P4PPP/RNB2RK1 w kq - 2 9'],
@@ -225,6 +239,7 @@ const testData = {
     },
 
     {
+      variant: 'Standard',
       id: 'rosen1',
       name: 'Scandi Rosen Trap',
       fen: ['rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4'],
@@ -232,6 +247,7 @@ const testData = {
       nextMoves: ['b4'],
     },
     {
+      variant: 'Standard',
       id: 'rosen2',
       name: 'Scandi Rosen Trap2',
       fen: ['rn1qkb1r/ppp1pppp/5n2/3P4/2B3b1/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4'],
@@ -239,6 +255,7 @@ const testData = {
       nextMoves: ['f3'],
     },
     {
+      variant: 'Standard',
       id: '4n',
       name: '4 knights scotsh',
       fen: [
@@ -248,6 +265,7 @@ const testData = {
       nextMoves: ['Nd5'],
     },
     {
+      variant: 'Standard',
       id: 'milnerbarry',
       name: 'French, advance, just a pawnMilner-Barry gambit',
       fen: [
@@ -452,7 +470,6 @@ const testData = {
       y: 348.717,
     },
   ],
-
   pieces2: [
     {
       color: 'black',
@@ -937,7 +954,6 @@ const testData = {
       },
     },
   ],
-
   pieces4: [
     {
       color: 'white',
@@ -1261,6 +1277,201 @@ const testData = {
     },
   ],
 
+  pieces5: [
+    {
+      color: 'black',
+      piece: 'rook',
+      x: 0,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'knight',
+      x: 35.7667,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'bishop',
+      x: 71.5333,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'queen',
+      x: 107.3,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'king',
+      x: 143.067,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'bishop',
+      x: 178.833,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'knight',
+      x: 214.6,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'rook',
+      x: 250.367,
+      y: 0,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 0,
+      y: 35.7667,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 35.7667,
+      y: 35.7667,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 71.5333,
+      y: 35.7667,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 107.3,
+      y: 35.7667,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 178.833,
+      y: 35.7667,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 214.6,
+      y: 35.7667,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 250.367,
+      y: 35.7667,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 0,
+      y: 214.6,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 35.7667,
+      y: 214.6,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 71.5333,
+      y: 214.6,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 107.3,
+      y: 214.6,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 178.833,
+      y: 214.6,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 214.6,
+      y: 214.6,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 250.367,
+      y: 214.6,
+    },
+    {
+      color: 'white',
+      piece: 'rook',
+      x: 0,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'knight',
+      x: 35.7667,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'bishop',
+      x: 71.5333,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'queen',
+      x: 107.3,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'king',
+      x: 143.067,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'bishop',
+      x: 178.833,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'knight',
+      x: 214.6,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'rook',
+      x: 250.367,
+      y: 250.367,
+    },
+    {
+      color: 'white',
+      piece: 'pawn',
+      x: 143.067,
+      y: 143.067,
+    },
+    {
+      color: 'black',
+      piece: 'pawn',
+      x: 143.067,
+      y: 107.3,
+    },
+  ],
+
   studyPgn: `[Event "🍄 Best Opening Traps 2020 🍄: Introduction"]
   [Site "https://lichess.org/study/nsIdXAP4/dTh2YVca"]
   [Result "*"]
@@ -1356,9 +1567,6 @@ const testData = {
   [Annotator "https://lichess.org/@/SuperChessBud"]
   
   1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qe3 Nf6 5. Bc4 Ne5 6. Bb3 Bb4+ 7. c3? (7. Bd2 $10) 7... Bc5 8. Qxc5?? (8. Qg3?? Bxf2+! 9. Qxf2 (9. Kxf2 Nxe4+ 10. Ke2 Nxg3+ 11. hxg3) 9... Nd3+ 10. Ke2 Nxf2 11. Kxf2) 8... Nd3+! 9. Kf1 Nxc5 *
-  
-  
-  
   `,
 };
 

@@ -69,6 +69,15 @@ describe('utils.test.js ', () => {
     expect(fen).toBe(expected);
   });
 
+  // 286.133 pieces5
+  test('generate Fen simple fen', () => {
+    let withIdx = utils.pieceTranslationToPos(286.133, testData.pieces5);
+    let fen = utils.piecesIdxToFen(withIdx, 'white');
+    let expected = 'rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR';
+
+    expect(fen).toBe(expected);
+  });
+
   test('db should be coherent', () => {
     testData.games.forEach((el) => {
       expect(el.fen.length).toBe(el.nextMoves.length);
@@ -79,6 +88,7 @@ describe('utils.test.js ', () => {
     let currentGame = {
       fen: 'r2qkbnr/ppp2ppp/2np4/4p2b/2B1P3/2N2N1P/PPPP1PP1/R1BQK2R',
       color: 'white',
+      variant: { name: 'Standard' },
     };
 
     let res = utils.fetchTips(currentGame, testData);
@@ -91,6 +101,7 @@ describe('utils.test.js ', () => {
     let currentGame = {
       fen: 'r1b1kbnr/ppppqppp/2n5/4P3/5B2/5N2/PPP1PPPP/RN1QKB1R',
       color: 'black',
+      variant: { name: 'Standard' },
     };
 
     let res = utils.fetchTips(currentGame, testData);

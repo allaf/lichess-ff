@@ -5,14 +5,16 @@ var utils = {
 
   fetchTips: (currentGame, db) => {
     // eslint-disable-next-line no-undef
-    return db.games.filter(
-      (game) =>
+    return db.games.filter((game) => {
+      return (
+        currentGame.variant.name === game.variant &&
         game.fen.filter(
           (fen) =>
             fen.split(' ')[0] === currentGame.fen &&
             fen.split(' ')[1] === currentGame.color.substr(0, 1)
         ).length
-    );
+      );
+    });
   },
   tipToHtml: (tip, gameFen) => {
     const moveIdx = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
