@@ -18,6 +18,7 @@ let RESTDB;
 const RESTBD_URL = 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db';
 const URL_MATCH = 'https://lichess.org/*';
 const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
+// const FILE_JQUERY_UI = '/libs/jquery-ui.js';
 const FILE_RXJS = '/libs/rxjs.umd.min.js';
 const FILE_UTILS = '/src/utils.js';
 const FILE_API_UTILS = '/src/apiUtils.js';
@@ -86,11 +87,11 @@ function loadContentAnalysis(tabId, apiKey, restdb) {
       { file: FILE_JQUERY },
       { file: FILE_RXJS },
       { file: FILE_UTILS },
+      // { file: '/libs/jquery-ui.js' },
       { file: FILE_CONTENT_SCRIPT_ANALYSIS },
     ]);
-    brw.tabs.insertCSS(tabId, { file: '/src/css/analysis.css' }).then(() => {
-      console.log('CSS INSERTED');
-    });
+    brw.tabs.insertCSS(tabId, { file: '/src/css/analysis.css' });
+    // brw.tabs.insertCSS(tabId, { file: '/src/css/jquery-ui.css' });
   });
 }
 

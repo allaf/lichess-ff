@@ -12,6 +12,9 @@ const rx = rxjs;
 const op = rxjs.operators;
 /* eslint-enable no-undef */
 
+// data-icon Bx  u:flechebas x:save /:cloud-save
+
+const exampleStudyId = 'Of3mcPk8';
 const DELAY_AUTO = 1000;
 const keyRightEvent = new KeyboardEvent('keydown', { which: 39 });
 const keyLeftEvent = new KeyboardEvent('keydown', { which: 37 });
@@ -47,37 +50,69 @@ function createInput(id, size) {
 function createLabel(t) {
   return jQuery('<label/>', { class: 'name', type: 'text' }).html(t);
 }
-function createBt(id, t, c, icon = '') {
+function createBt(id, text, cssClasses, icon = '', style) {
   return jQuery('<button/>', {
     id,
-    class: c,
+    class: cssClasses,
     'data-icon': icon,
-  }).html(t);
+    style,
+  }).html(text);
 }
 
 function createTipForm() {
   const outer = jQuery('<div/>', { class: 'tipsDivAnalysis' });
 
+  //////////////////////////////////////////
   const divAdd = jQuery('<div/>', { class: 'divAdd' });
+  const divContentAdd = jQuery('<div/>', { class: 'divContentAdd' });
+  const titleAdd = jQuery('<h2/>')
+    .html('Add a new Trap')
+    .click(() => {
+      divContentAdd.slideToggle('slow');
+    });
+  divAdd.append(titleAdd, divContentAdd);
+
+  const btAutoRead = createBt(
+    'btAutoRead',
+    'Submit',
+    'submit button text confirm button-blue',
+    '/'
+  ).click(handleAutoRead);
 
   const divAddInput1 = jQuery('<div/>', { class: 'inputLine' });
   const divAddInput2 = jQuery('<div/>', { class: 'inputLine' });
   const divAddBt = jQuery('<div/>', { class: 'divBt' });
+  divAddBt.append(btAutoRead);
 
   const labelTitle = createLabel('Title');
   const inputTitle = createInput('inputTitle', 20);
   const labelUrl = createLabel('Url');
   const inputUrl = createInput('inputUrl', 20);
 
+  divAddInput1.append(labelTitle, inputTitle);
+  divAddInput2.append(labelUrl, inputUrl);
+  divContentAdd.append(divAddInput1);
+  divContentAdd.append(divAddInput2);
+  divContentAdd.append(divAddBt);
+  outer.append(divAdd);
+
+  // STUDY ////////////////////////////////////////
+
   const labelStudyId = createLabel('Study id');
-  const inputStudyId = createInput('inputStudyId', 10).val('nsIdXAP4');
+  const inputStudyId = createInput('inputStudyId', 10).val(exampleStudyId);
 
   const labelSelectChapter = createLabel('Chapter');
-  const selectChapter = jQuery('<select/>', { id: 'selectChapter' });
+  const selectChapter = jQuery('<select/>', {
+    id: 'selectChapter',
+    class: 'selectChapter',
+  });
+  const labelSelectChapters = createLabel('Chapters');
   const selectChapterMult = jQuery('<select/>', {
     id: 'selectChapterMult',
+    class: 'selectChapter',
     multiple: '',
   });
+  //TODO jqueryUI $( "#resizable" ).resizable();
   const btLoadStudy = createBt(
     'btLoadStudy',
     '',
@@ -92,59 +127,74 @@ function createTipForm() {
     'G'
   ).click(handleLoadChapter);
 
+  const btReverseSelection = createBt(
+    'btReverseSelection',
+    '',
+    'marginL fbt',
+    'B',
+    'border-radius: 3px 3px 3px 3px;'
+  ).click(reverseSelection);
+
   const btLoadChapterMultWhite = createBt(
     'btLoadChapterMultWhite',
-    'Load for White',
-    'marginL button button-thin action text',
-    'G'
+    'Save for White',
+    'marginL button action text',
+    '/'
   ).click(handleLoadChapterMultWhite);
+
   const btLoadChapterMultBlack = createBt(
     '',
-    'Load for Black',
-    'marginL button button-thin action text',
-    'G'
+    'Save for Black',
+    'marginL button action text',
+    '/'
   ).click(handleLoadChapterMultBlack);
 
   const divStudyInput1 = jQuery('<div/>', { class: 'inputLine' });
   const divStudyInput2 = jQuery('<div/>', { class: 'inputLine' });
   const divStudyInput3 = jQuery('<div/>', { class: 'inputLine' });
+  const divStudyInput4 = jQuery('<div/>', { class: 'inputLine' });
   divStudyInput1.append(labelStudyId, inputStudyId, btLoadStudy);
   divStudyInput2.append(labelSelectChapter, selectChapter, btLoadChapter);
+
   divStudyInput3.append(
+    labelSelectChapters,
     selectChapterMult,
-    btLoadChapterMultWhite,
-    btLoadChapterMultBlack
+    btReverseSelection
+  );
+  divStudyInput4.append(btLoadChapterMultWhite, btLoadChapterMultBlack);
+
+  const divStudy = jQuery('<div/>', { class: 'divStudy' });
+  const divContentStudy = jQuery('<div/>', { class: 'divContentStudy' });
+  const titleStudy = jQuery('<h2/>')
+    .html('Import Study Chapters')
+    .click(() => {
+      divContentStudy.slideToggle('slow');
+    });
+
+  divContentStudy.append(
+    titleStudy,
+    divStudyInput1,
+    divStudyInput2,
+    divStudyInput3,
+    divStudyInput4
   );
 
-  const btAutoRead = createBt(
-    'btAutoRead',
-    'Submit',
-    'submit button text confirm button-blue',
-    '/'
-  ).click(handleAutoRead);
+  divStudy.append(titleStudy, divContentStudy);
+  outer.append(divStudy);
 
-  divAddInput1.append(labelTitle, inputTitle);
-  divAddInput2.append(labelUrl, inputUrl);
-  divAddBt.append(btAutoRead);
+  //////////////////////////////////////////
 
-  divAdd.append('<h2>Add a new trap</h2>');
-  divAdd.append(divAddInput1);
-  divAdd.append(divAddInput2);
-
-  jQuery('.analyse__underboard').append(divStudyInput1);
-  jQuery('.analyse__underboard').append(divStudyInput2);
-  jQuery('.analyse__underboard').append(divStudyInput3);
-
-  divAdd.append(divAddBt);
-
-  outer.append(divAdd);
-
-  /////////////////////
   const divUpd = jQuery('<div/>', { class: 'divUpd' });
+  const divContentUpd = jQuery('<div/>', { class: 'divContentUpd' });
+  const titleUpd = jQuery('<h2/>')
+    .html('Add one Move on existing Trap')
+    .click(() => {
+      divContentUpd.slideToggle('slow');
+    });
+
   const divUpdInput1 = jQuery('<div/>', { class: 'inputLine' });
   const divUpdInput2 = jQuery('<div/>', { class: 'inputLine' });
   const divUpdBt = jQuery('<div/>', { class: 'divBt' });
-
   const labelMove = createLabel('Move');
   const inputMove = createInput('inputMove', '5');
   const labelSelect = createLabel('Trap');
@@ -157,12 +207,14 @@ function createTipForm() {
     'marginL button button-thin action text',
     'P'
   ).click(readNextMove);
+
   const btAddOnePos = createBt(
     'btAddOnePos',
     'Add position',
     'submit button text confirm button-blue',
     'O'
   ).click(() => {
+    //TODO wait
     var _id = jQuery('#selectTip').val();
     var fen = jQuery('.analyse__underboard__fen').val();
     const activeMove = jQuery('#inputMove').val();
@@ -179,25 +231,55 @@ function createTipForm() {
   divUpdInput1.append(labelMove, inputMove, btRefreshMove);
   divUpdInput2.append(labelSelect, selectTip, btRefreshTip);
 
-  divUpd.append('<h2>Add one move on existing trap</h2>');
-  divUpd.append(divUpdInput1);
-  divUpd.append(divUpdInput2);
-  divUpd.append(divUpdBt);
-
+  divUpd.append(titleUpd, divContentUpd);
+  divContentUpd.append(divUpdInput1);
+  divContentUpd.append(divUpdInput2);
   divUpdBt.append(btAddOnePos);
+  divContentUpd.append(divUpdBt);
 
   outer.append(divUpd);
+
+  titleUpd.click();
+  titleAdd.click();
+  titleStudy.click();
+
+  //////////////////////////////////////////
+
+  function reverseSelection() {
+    jQuery('#selectChapterMult > option').each((i, x) => {
+      var s = jQuery(x);
+      s.prop('selected', !s.prop('selected'));
+    });
+  }
 
   function handleLoadStudy() {
     const studyId = jQuery('#inputStudyId').val();
     jQuery.get(`https://lichess.org/study/${studyId}.pgn`).done((x) => {
-      const matches = Utils.parseChapters(x);
+      //TODO avoid introduction
+      const chapters = Utils.parseChapters(x);
       jQuery('#selectChapter > option').remove();
       jQuery('#selectChapterMult > option').remove();
-      //TODO bt reverse selection
-      matches.forEach((x) => {
-        selectChapter.append(`<option value="${x.val}">${x.name}</option>`);
-        selectChapterMult.append(`<option value="${x.val}">${x.name}</option>`);
+      chapters.forEach((chapt) => {
+        selectChapter.append(
+          `<option value="${chapt.val}">${chapt.name}</option>`
+        );
+        selectChapterMult.append(
+          `<option value="${chapt.val}">${chapt.name}</option>`
+        );
+      });
+      chapters.forEach((chapt) => {
+        jQuery
+          .get(chapt.val + '.pgn')
+          .done(() => {
+            jQuery(`.selectChapter>option[value="${chapt.val}"]`).addClass(
+              'public'
+            );
+          })
+          .fail(() => {
+            jQuery(`.selectChapter>option[value="${chapt.val}"]`)
+              .prop('disabled', true)
+              .addClass('private');
+          });
       });
     });
   }
