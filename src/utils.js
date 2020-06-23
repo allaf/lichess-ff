@@ -16,22 +16,37 @@ var utils = {
       );
     });
   },
-  tipToHtml: (tip, gameFen) => {
-    const moveIdx = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
-    return (
-      '<li><a target="_blank" href="' +
-      tip.url +
-      '">' +
-      tip.name +
-      '</a>' +
-      ' : ' +
-      tip.nextMoves[moveIdx] +
-      '</li>'
-    );
+
+  alphaSort: (a, b) => {
+    var nameA = a.toUpperCase();
+    var nameB = b.toUpperCase();
+    return nameA > nameB;
   },
 
+  extractTitle: (pgn) => {
+    const regexpEvent = /\[Event "[^:]*: (.*)"\]/gm;
+    pgn.matchAll(regexpEvent)
+    return 'toto';
+  },
+
+  tipTuple: (tip, gameFen) => {
+    const moveIdx = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
+    return { url: tip.url, move: tip.nextMoves[moveIdx], name: tip.name };
+  },
+
+  tipToHtml: (tip, gameFen) => {
+    const moveIdx = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
+    return `<li>${tip.nextMoves[moveIdx]} : <a target="_blank" href="${tip.url}">${tip.name}</a></li>`;
+  },
+
+  tupleToHtml: (tuple) => {
+    return `<li>${tuple.move} : <a target="_blank" href="${tuple.url}">${tuple.name}</a></li>`;
+  },
   getListLinks: function (tips, gameFen) {
-    return tips.map((t) => this.tipToHtml(t, gameFen), this);
+    return tips
+      .map((t) => this.tipTuple(t, gameFen))
+      .sort((x, y) => (x.move === y.move ? x.name < y.name : x.move < y.move))
+      .map(this.tupleToHtml);
   },
 
   executeScripts: (tabId, injectDetailsArray) => {
@@ -128,11 +143,11 @@ var utils = {
   purge: (str) => {
     return str.replace(/[\s`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
   },
-  parseChapters: (x) => {
+  parseChapters: (pgn) => {
     const regexpEvent = /\[Event "[^:]*: (.*)"\]/gm;
     const regexpSite = /\[Site "(https:\/\/lichess\.org\/study\/.*)"]/gm;
-    const matchesEvent = [...x.matchAll(regexpEvent)];
-    const matchesSite = [...x.matchAll(regexpSite)];
+    const matchesEvent = [...pgn.matchAll(regexpEvent)];
+    const matchesSite = [...pgn.matchAll(regexpSite)];
 
     const mapped = matchesEvent.map((x, i) => {
       return { name: x[1], val: matchesSite[i][1] };

@@ -102,6 +102,7 @@ function loadContentGame(tabInfo, token, apiKey, restdb) {
       ApiUtils.getDistantDb(apiKey, restdb).then((data) => {
         DB = data;
         loadContentScript(tabInfo.id);
+        brw.tabs.insertCSS(tabInfo.id, { file: '/src/css/game.css' });
       });
     } else {
       displayWarningSettings(
