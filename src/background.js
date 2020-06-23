@@ -87,7 +87,6 @@ function loadContentAnalysis(tabId, apiKey, restdb) {
       { file: FILE_JQUERY },
       { file: FILE_RXJS },
       { file: FILE_UTILS },
-      // { file: '/libs/jquery-ui.js' },
       { file: FILE_CONTENT_SCRIPT_ANALYSIS },
     ]);
     brw.tabs.insertCSS(tabId, { file: '/src/css/analysis.css' });
