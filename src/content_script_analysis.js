@@ -2,9 +2,6 @@
 
 console.log('content analysis starts');
 
-//TODO bug parsing chapter for CQhQn8Kg 3SBPV7cO (MB double)
-//TODO load existing trap bt
-//TODO bt load one chapter https://lichess.org/study/CQhQn8Kg/zcG7eKXq
 /* eslint-disable no-undef */
 const jQuery = $;
 const brw = browser;
@@ -38,10 +35,12 @@ function populateWithTips(selectEl, tips) {
   const variant = getVariant();
   selectEl.append('<option selected></option>');
   tips
-    .sort((x, y) => Utils.alphaSort(x.name, y.name))
+    .sort((a, b) => a.name.toUpperCase() > b.name.toUpperCase())
     .filter((tip) => tip.variant === variant)
     .forEach((tip) => {
-      selectEl.append(`<option value="${tip._id}">${tip.name}</option>`);
+      selectEl.append(
+        `<option value="${tip._id}" data-url="${tip.url}">${tip.name}</option>`
+      );
     });
 }
 
@@ -51,9 +50,10 @@ function createInput(id, size) {
 function createLabel(t) {
   return jQuery('<label/>', { class: 'name', type: 'text' }).html(t);
 }
-function createBt(id, text, cssClasses, icon = '', style) {
+function createBt(id, text, cssClasses, icon = '', style, title) {
   return jQuery('<button/>', {
     id,
+    title,
     class: cssClasses,
     'data-icon': icon,
     style,
@@ -221,6 +221,17 @@ function createTipForm() {
     'P'
   ).click(readNextMove);
 
+  const btLoadTip = createBt(
+    'btLoadTip',
+    '',
+    'marginL button button-thin action text',
+    'G',
+    'Load'
+  ).click(() => {
+    const url = jQuery('#selectTip>option:selected').attr('data-url');
+    fetchAndSetChapter(url);
+  });
+
   const btAddOnePos = createBt(
     'btAddOnePos',
     'Add position',
@@ -228,8 +239,8 @@ function createTipForm() {
     'O'
   ).click(() => {
     //TODO show update finshed success
-    var _id = jQuery('#selectTip').val();
-    var fen = jQuery('.analyse__underboard__fen').val();
+    const _id = jQuery('#selectTip').val();
+    const fen = jQuery('.analyse__underboard__fen').val();
     const activeMove = jQuery('#inputMove').val();
     updateTrap(_id, fen, activeMove);
   });
@@ -242,7 +253,7 @@ function createTipForm() {
   ).click(refreshTipsList);
 
   divUpdInput1.append(labelMove, inputMove, btRefreshMove);
-  divUpdInput2.append(labelSelect, selectTip, btRefreshTip);
+  divUpdInput2.append(labelSelect, selectTip, btRefreshTip, btLoadTip);
 
   divUpd.append(titleUpd, divContentUpd);
   divContentUpd.append(divUpdInput1);
@@ -259,9 +270,9 @@ function createTipForm() {
   //////////////////////////////////////////
 
   function reverseSelection() {
-    jQuery('#selectChapterMult > option').each((i, x) => {
-      var s = jQuery(x);
-      s.prop('selected', !s.prop('selected'));
+    jQuery('#selectChapterMult > option').each((i, el) => {
+      const jEl = jQuery(el);
+      jEl.prop('selected', !jEl.prop('selected'));
     });
   }
 
@@ -289,9 +300,8 @@ function createTipForm() {
             );
           })
           .fail(() => {
-            // https://lichess.org/study/CQhQn8Kg/IP92W8yd
-            console.log('failed to load chapter ', chapt.val + '.pgn');
-            //TODO choper le chapter quand meme via link
+            console.warn('failed to load chapter ', chapt.val + '.pgn');
+            //TODO choper le chapter quand meme via link?
             jQuery(`.selectChapter>option[value="${chapt.val}"]`)
               .prop('disabled', true)
               .addClass('private');
@@ -310,20 +320,15 @@ function createTipForm() {
 
 function handleLoadChapter() {
   const url = jQuery('#selectChapter').val();
-  console.log('URL CHAPT', url);
-  jQuery.get(`${url}.pgn`).done((pgn) => {
-    jQuery('.pgn > .pair > textarea.copyable').val(pgn);
-    jQuery('.pgn button.button.button-thin.action.text').click();
-    jQuery('#inputTitle').val(jQuery('#selectChapter option:selected').text());
-    jQuery('#inputUrl').val(jQuery('#selectChapter').val());
-    setTimeout(() => {
-      goFirstMove();
-    }, 500);
-  });
+  fetchAndSetChapter(url);
 }
-function handleLoadChapterUrl() {//TODO facto avec celui du dessus
+
+function handleLoadChapterUrl() {
   const url = jQuery('#inputChapterUrl').val();
-  console.log('URL CHAPT', url);
+  fetchAndSetChapter(url);
+}
+
+function fetchAndSetChapter(url) {
   jQuery.get(`${url}.pgn`).done((pgn) => {
     jQuery('.pgn > .pair > textarea.copyable').val(pgn);
     jQuery('.pgn button.button.button-thin.action.text').click();
@@ -395,8 +400,7 @@ function updateTrap(id, fen, move) {
 }
 
 function insertForm() {
-  var tipFormDiv = createTipForm();
-  jQuery('.analyse__side').append(tipFormDiv);
+  jQuery('.analyse__side').append(createTipForm());
 }
 
 function readNextMove() {
@@ -466,5 +470,3 @@ function main() {
     insertForm();
   }
 }
-
-console.log('content analysis stops');

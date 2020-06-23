@@ -2,18 +2,14 @@
 
 //FIXME tab chat broken on first click
 
-console.log('content starts');
-
 /* eslint-disable no-undef */
 const jQuery = $;
 const rx = rxjs;
-const op = rxjs.operators;
 const Utils = utils;
 const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
 
-const DELAY_MONITOR = 500; //TODO in prefs
 const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
 const sadHorsey = brw.runtime.getURL('img/lichess_logo_500_sad.png');
 const happyHorsey = brw.runtime.getURL('img/lichess_logo_500.png');
@@ -23,12 +19,8 @@ let DB = [];
 const gameSubject = new rx.BehaviorSubject();
 gameSubject.subscribe((game) => {
   if (game) {
-    console.log('SUBJ SUB', game);
-
-    var tipsDiv = jQuery('.mchat__content.tips-content');
-
+    const tipsDiv = jQuery('.mchat__content.tips-content');
     if (tipsDiv) {
-      console.log('am updating the tips for new fen => ', game.fen);
       jQuery('#tips-wait').show();
       tipsDiv.html(buildHtmlTips(game));
       jQuery('#tips-wait').hide();
@@ -37,15 +29,13 @@ gameSubject.subscribe((game) => {
 });
 
 function main() {
-  monitorChange(DELAY_MONITOR);
+  monitorChange();
 
   insertTipTab();
-
   updateGame();
-
   jQuery('.mchat__tab').click(function () {
-    var jThis = jQuery(this);
-    var activeTabClass = 'mchat__tab-active';
+    const jThis = jQuery(this);
+    const activeTabClass = 'mchat__tab-active';
     jQuery('.' + activeTabClass).removeClass(activeTabClass);
     jThis.addClass(activeTabClass);
 
@@ -65,47 +55,26 @@ function main() {
 
 function buildHtmlTips(currentGame) {
   const tips = Utils.fetchTips(currentGame, DB);
-  console.log('=> tips found : ', tips.length);
-  let html;
+  let html = '';
   let backUrl;
-  let happy = false;
   if (tips.length) {
-    happy = true;
     backUrl = happyHorsey;
     const links = Utils.getListLinks(tips, currentGame.fen);
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
-    links.push('<li>cccccc</li>');
+    const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
+    const bottomText = Array.from(distinctMoves).join(' ');
+    html += `<span class="tip-info">${bottomText}</strong></span>`;
 
-    html = `<ul class="tip">${links.join('')}</ul>`;
+    html += `<ul class="tip">${links.join('')}</ul>`;
   } else {
     backUrl = sadHorsey;
-    html = '<div class="no-tips">No tips found :(</div>';
+    html += '<div class="no-tips">No tips found :(</div>';
   }
 
   const divContent = jQuery('.tips-content');
   if (divContent) {
-    // eslint-disable-next-line quotes
-    divContent.css('background-image', "url('" + backUrl + "')");
-    divContent.css('background-size', '30%');
-    divContent.css('background-repeat', 'no-repeat');
-    divContent.css('background-position', 'center center');
-    if (happy) {
-    }
+    divContent.css('background-image', `url('${backUrl}')`);
   }
 
-  var today = new Date();
-  var time =
-    today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
-
-  html += `<span class="tip-info">(${time})</strong></span>`;
   return html;
 }
 
@@ -148,27 +117,34 @@ function insertTipTab() {
   });
 }
 
-function monitorChange(delay = 1000) {
-  jQuery('.rmoves').on('DOMSubtreeModified', () => {
-    console.log('monitor event');
-    setTimeout(function () {
-      if (isMyTurn()) {
-        updateGame();
-      }
-    }, delay);
+function monitorChange() {
+  brw.storage.local.get().then((storage) => {
+    const delay = 500;
+    if (!storage.delay) {
+      brw.storage.local.set({ delay });
+    }
+
+    jQuery('.rmoves').on('DOMSubtreeModified', () => {
+      setTimeout(
+        function () {
+          if (isMyTurn()) {
+            updateGame();
+          }
+        },
+        storage.delay ? !storage.delay : delay
+      );
+    });
   });
 }
 
 function updateGame() {
   const fen = boardToFen();
-  console.log('Fen extracted from html : ', fen);
   if (fen.includes('a')) {
     console.error('BAD FEN, please manually reload');
     return;
   }
 
   const game = gameSubject.getValue();
-  console.log('nexting game');
   game.fen = fen;
   gameSubject.next(game);
 }
@@ -196,5 +172,3 @@ jQuery(document).ready(function () {
     });
   });
 });
-
-console.log('content end');

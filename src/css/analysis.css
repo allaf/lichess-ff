@@ -81,7 +81,8 @@ h2::after {
 }
 
 .inputLine select {
-  max-width: 15em;
+  max-width: 14em;
+  min-width: 10em;
 }
 
 .divBt {

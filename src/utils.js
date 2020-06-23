@@ -17,16 +17,9 @@ var utils = {
     });
   },
 
-  alphaSort: (a, b) => {
-    var nameA = a.toUpperCase();
-    var nameB = b.toUpperCase();
-    return nameA > nameB;
-  },
-
   extractTitle: (pgn) => {
     const regexpEvent = /\[Event "[^:]*: (.*)"\]/gm;
-    pgn.matchAll(regexpEvent)
-    return 'toto';
+    return regexpEvent.exec(pgn)[1];
   },
 
   tipTuple: (tip, gameFen) => {
@@ -34,20 +27,20 @@ var utils = {
     return { url: tip.url, move: tip.nextMoves[moveIdx], name: tip.name };
   },
 
-  tipToHtml: (tip, gameFen) => {
-    const moveIdx = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
-    return `<li>${tip.nextMoves[moveIdx]} : <a target="_blank" href="${tip.url}">${tip.name}</a></li>`;
+  tupleToHtml: (tuple) => {
+    return `<li><span class="tip-move">${tuple.move}</span> : <a target="_blank" href="${tuple.url}">${tuple.name}</a></li>`;
   },
 
-  tupleToHtml: (tuple) => {
-    return `<li>${tuple.move} : <a target="_blank" href="${tuple.url}">${tuple.name}</a></li>`;
-  },
-  getListLinks: function (tips, gameFen) {
-    return tips
-      .map((t) => this.tipTuple(t, gameFen))
-      .sort((x, y) => (x.move === y.move ? x.name < y.name : x.move < y.move))
-      .map(this.tupleToHtml);
-  },
+  getSortedTuples: (tips, gameFen) =>
+    tips
+      .map((t) => utils.tipTuple(t, gameFen))
+      .sort((x, y) => (x.move === y.move ? x.name < y.name : x.move < y.move)),
+
+  getListLinks: (tips, gameFen) =>
+    utils.getSortedTuples(tips, gameFen).map(utils.tupleToHtml),
+
+  getDistinctMoves: (tips, gameFen) =>
+    new Set(utils.getSortedTuples(tips, gameFen).map((x) => x.move)),
 
   executeScripts: (tabId, injectDetailsArray) => {
     function createCallback(tabId, injectDetails, innerCallback) {

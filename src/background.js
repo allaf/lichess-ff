@@ -1,7 +1,5 @@
 'use strict';
 
-console.log('background starts');
-
 /* eslint-disable no-undef */
 const brw = browser;
 const ApiUtils = apiUtils;
@@ -68,7 +66,6 @@ brw.tabs.onUpdated.addListener((id, changeInfo, tab) => {
 });
 
 function displayWarningSettings(tabId, title) {
-  console.warn('You must define storage.token && storage.apiKey');
   brw.pageAction.setTitle({
     tabId: tabId,
     title,
@@ -82,7 +79,6 @@ function displayWarningSettings(tabId, title) {
 function loadContentAnalysis(tabId, apiKey, restdb) {
   ApiUtils.getDistantDb(apiKey, restdb).then((data) => {
     DB = data;
-    console.log('db is fetched', data.length, tabId);
     Utils.executeScripts(tabId, [
       { file: FILE_JQUERY },
       { file: FILE_RXJS },
@@ -154,8 +150,9 @@ brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
   } else if (msg.id === 'update-tip') {
     getTip(msg.tip._id).done((resp) => {
       updateTip(resp, msg.tip)
-        .done((updDone) => {
-          console.log('upload done ', updDone);
+        .done(() => {
+          // console.log('upload done ok', updDone);
+          //TODO update info
         })
         .fail(() => {
           console.error('put tip failed');
@@ -163,8 +160,9 @@ brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
     });
   } else if (msg.id === 'add-tip') {
     postTip(msg.trap)
-      .done((postRes) => {
-        console.log('post done ', postRes);
+      .done(() => {
+        // console.log('post done ok', postRes);
+        //TODO update info
       })
       .fail(() => {
         console.error('post tip failed');
@@ -208,5 +206,3 @@ function loadContentScript(tabId) {
     { file: FILE_CONTENT_SCRIPT },
   ]);
 }
-
-console.log('background ends');

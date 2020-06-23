@@ -118,7 +118,7 @@ describe('utils.test.js ', () => {
 
     expect(tips.length).toBe(1);
     expect(tips[0]).toBe(
-      '<li><a target="_blank" href="https://youtu.be/tYOnym3ZINU?t=475">Englund gambit (scandi)</a> : Qb4+</li>'
+      '<li><span class=\"tip-move\">Qb4+</span> : <a target="_blank" href="https://youtu.be/tYOnym3ZINU?t=475">Englund gambit (scandi)</a></li>'
     );
   });
 
@@ -135,13 +135,13 @@ describe('utils.test.js ', () => {
 
     expect(tips.length).toBe(3);
     expect(links[0]).toBe(
-      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=522">Venus trap</a> : Nc3</li>'
+      '<li><span class=\"tip-move\">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=522">Venus trap</a></li>'
     );
     expect(links[1]).toBe(
-      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=386">Mars trap</a> : Nc3</li>'
+      '<li><span class=\"tip-move\">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=386">Mars trap</a></li>'
     );
     expect(links[2]).toBe(
-      '<li><a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=67">Hercule trap</a> : Nc3</li>'
+      '<li><span class=\"tip-move\">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=67">Hercule trap</a></li>'
     );
   });
 

@@ -1,6 +1,20 @@
+.tip-move {
+  font-weight: bolder;
+  font-size: larger;
+}
+
+.tip-info {
+  font-weight: bolder;
+  font-size: larger;
+  text-align: center;
+}
+
 .tips-content {
   overflow-x: hidden;
   overflow-y: auto;
+  background-size: 30%;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 ul.tip {

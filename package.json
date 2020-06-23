@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "web-ext build --overwrite-dest",
+    "build": "web-ext build --overwrite-dest --ignore-files test",
     "start": "web-ext run",
-    "updateDb": "cd ~/projets/majdb; npm run start",
+    "majdb": "cd ~/projets/majdb; npm run start",
     "lint-watch": "esw -w",
     "test:watch": "jest --watch",
     "test": "jest",
