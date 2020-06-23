@@ -1,0 +1,23 @@
+.tips-content {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+ul.tip {
+  flex: 1 1 auto;
+  padding: 0.5em 0 0.5em 10px;
+}
+
+.no-tips {
+  flex: 1 1 auto;
+  padding: 0.5em 0 0.5em 10px;
+}
+.tip-info {
+  font-weight: bold;
+  padding: 3px 20px 3px 4px;
+  border-top: 1px solid #404040;
+}
+
+#tip-wait {
+  padding-left: 3px;
+}

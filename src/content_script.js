@@ -1,16 +1,19 @@
 'use strict';
 
+//FIXME tab chat broken on first click
+
 console.log('content starts');
 
 /* eslint-disable no-undef */
 const jQuery = $;
 const rx = rxjs;
+const op = rxjs.operators;
 const Utils = utils;
 const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
 
-const DELAY_MONITOR = 2000;
+const DELAY_MONITOR = 500; //TODO in prefs
 const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
 const sadHorsey = brw.runtime.getURL('img/lichess_logo_500_sad.png');
 const happyHorsey = brw.runtime.getURL('img/lichess_logo_500.png');
@@ -23,6 +26,7 @@ gameSubject.subscribe((game) => {
     console.log('SUBJ SUB', game);
 
     var tipsDiv = jQuery('.mchat__content.tips-content');
+
     if (tipsDiv) {
       console.log('am updating the tips for new fen => ', game.fen);
       jQuery('#tips-wait').show();
@@ -68,14 +72,22 @@ function buildHtmlTips(currentGame) {
   if (tips.length) {
     happy = true;
     backUrl = happyHorsey;
-    html =
-      '<ul style="flex: 1 1 auto; padding:.5em 0 .5em 10px;">' +
-      Utils.getListLinks(tips, currentGame.fen).join('') +
-      '</ul>';
+    const links = Utils.getListLinks(tips, currentGame.fen);
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+    links.push('<li>cccccc</li>');
+
+    html = `<ul class="tip">${links.join('')}</ul>`;
   } else {
     backUrl = sadHorsey;
-    html =
-      '<div style="flex: 1 1 auto;padding:.5em 0 .5em 10px;">No tips found :(</div>';
+    html = '<div class="no-tips">No tips found :(</div>';
   }
 
   const divContent = jQuery('.tips-content');
@@ -93,11 +105,7 @@ function buildHtmlTips(currentGame) {
   var time =
     today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds();
 
-  html +=
-    '<span style="padding: 3px 20px 3px 4px;border-top: 1px solid #404040;"><strong>' +
-    ' (' +
-    time +
-    ') </strong></span>';
+  html += `<span class="tip-info">(${time})</strong></span>`;
   return html;
 }
 
@@ -131,7 +139,7 @@ function insertTipTab() {
   jQuery('.mchat__tabs.nb_2').append(`
     <div id="tips" class="mchat__tab tips"><span>Tips</span>
       <button id="tips-refresh" data-icon="P" class="${btClass}"></button>
-      <img id="tips-wait" style="padding-left:3px;" src="${imgSrc}">
+      <img id="tips-wait" src="${imgSrc}">
     </div>
     `);
 

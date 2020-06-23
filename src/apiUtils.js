@@ -7,6 +7,12 @@ const URL_ACCOUNT = 'https://lichess.org/api/account/playing';
 
 // eslint-disable-next-line no-unused-vars
 var apiUtils = {
+  xxx: (tips) => {
+
+    return tips;
+
+
+  },
   getDistantDb: (apiKey, dbUrl) =>
     $.ajax({
       async: true,

@@ -3,7 +3,8 @@
 console.log('content analysis starts');
 
 //TODO bug parsing chapter for CQhQn8Kg 3SBPV7cO (MB double)
-
+//TODO load existing trap bt
+//TODO bt load one chapter https://lichess.org/study/CQhQn8Kg/zcG7eKXq
 /* eslint-disable no-undef */
 const jQuery = $;
 const brw = browser;
@@ -13,7 +14,6 @@ const op = rxjs.operators;
 /* eslint-enable no-undef */
 
 // data-icon Bx  u:flechebas x:save /:cloud-save
-
 const exampleStudyId = 'Of3mcPk8';
 const DELAY_AUTO = 1000;
 const keyRightEvent = new KeyboardEvent('keydown', { which: 39 });
@@ -38,6 +38,7 @@ function populateWithTips(selectEl, tips) {
   const variant = getVariant();
   selectEl.append('<option selected></option>');
   tips
+    .sort((x, y) => Utils.alphaSort(x.name, y.name))
     .filter((tip) => tip.variant === variant)
     .forEach((tip) => {
       selectEl.append(`<option value="${tip._id}">${tip.name}</option>`);
@@ -112,13 +113,21 @@ function createTipForm() {
     class: 'selectChapter',
     multiple: '',
   });
-  //TODO jqueryUI $( "#resizable" ).resizable();
   const btLoadStudy = createBt(
     'btLoadStudy',
     '',
     'marginL button button-thin action text',
     'P'
   ).click(handleLoadStudy);
+
+  const labelChapterUrl = createLabel('Chapt url');
+  const inputChapterUrl = createInput('inputChapterUrl', 10);
+  const btLoadChapterUrl = createBt(
+    'btLoadChapterUrl',
+    'Load',
+    'marginL button button-thin action text',
+    'G'
+  ).click(handleLoadChapterUrl);
 
   const btLoadChapter = createBt(
     'btLoadChapter',
@@ -153,6 +162,8 @@ function createTipForm() {
   const divStudyInput2 = jQuery('<div/>', { class: 'inputLine' });
   const divStudyInput3 = jQuery('<div/>', { class: 'inputLine' });
   const divStudyInput4 = jQuery('<div/>', { class: 'inputLine' });
+  const divStudyInput5 = jQuery('<div/>', { class: 'inputLine' });
+
   divStudyInput1.append(labelStudyId, inputStudyId, btLoadStudy);
   divStudyInput2.append(labelSelectChapter, selectChapter, btLoadChapter);
 
@@ -162,6 +173,7 @@ function createTipForm() {
     btReverseSelection
   );
   divStudyInput4.append(btLoadChapterMultWhite, btLoadChapterMultBlack);
+  divStudyInput5.append(labelChapterUrl, inputChapterUrl, btLoadChapterUrl);
 
   const divStudy = jQuery('<div/>', { class: 'divStudy' });
   const divContentStudy = jQuery('<div/>', { class: 'divContentStudy' });
@@ -176,7 +188,8 @@ function createTipForm() {
     divStudyInput1,
     divStudyInput2,
     divStudyInput3,
-    divStudyInput4
+    divStudyInput4,
+    divStudyInput5
   );
 
   divStudy.append(titleStudy, divContentStudy);
@@ -214,7 +227,7 @@ function createTipForm() {
     'submit button text confirm button-blue',
     'O'
   ).click(() => {
-    //TODO wait
+    //TODO show update finshed success
     var _id = jQuery('#selectTip').val();
     var fen = jQuery('.analyse__underboard__fen').val();
     const activeMove = jQuery('#inputMove').val();
@@ -276,6 +289,9 @@ function createTipForm() {
             );
           })
           .fail(() => {
+            // https://lichess.org/study/CQhQn8Kg/IP92W8yd
+            console.log('failed to load chapter ', chapt.val + '.pgn');
+            //TODO choper le chapter quand meme via link
             jQuery(`.selectChapter>option[value="${chapt.val}"]`)
               .prop('disabled', true)
               .addClass('private');
@@ -300,6 +316,19 @@ function handleLoadChapter() {
     jQuery('.pgn button.button.button-thin.action.text').click();
     jQuery('#inputTitle').val(jQuery('#selectChapter option:selected').text());
     jQuery('#inputUrl').val(jQuery('#selectChapter').val());
+    setTimeout(() => {
+      goFirstMove();
+    }, 500);
+  });
+}
+function handleLoadChapterUrl() {//TODO facto avec celui du dessus
+  const url = jQuery('#inputChapterUrl').val();
+  console.log('URL CHAPT', url);
+  jQuery.get(`${url}.pgn`).done((pgn) => {
+    jQuery('.pgn > .pair > textarea.copyable').val(pgn);
+    jQuery('.pgn button.button.button-thin.action.text').click();
+    jQuery('#inputTitle').val(Utils.extractTitle(pgn));
+    jQuery('#inputUrl').val(url);
     setTimeout(() => {
       goFirstMove();
     }, 500);
