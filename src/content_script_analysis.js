@@ -415,17 +415,15 @@ function readNextMove() {
 }
 
 function handleAutoRead() {
-  const moveList = [];
-  const fenList = [];
+  const positions = [];
   while (!isLastMove()) {
-    fenList.push(readFen());
-    moveList.push(readNextMove());
+    positions.push({ fen: readFen(), move: readNextMove() });
     document.dispatchEvent(keyRightEvent);
     document.dispatchEvent(keyRightEvent);
   }
-  if (fenList.length && moveList.length && fenList.length === moveList.length) {
-    console.log('sending addtip', fenList, moveList);
-    sendMsgAddTip(fenList, moveList).then();
+  if (positions.length) {
+    console.log('sending addtip', positions);
+    sendMsgAddTip(positions).then();
   }
 }
 
@@ -433,7 +431,7 @@ function getVariant() {
   return jQuery('[for=mselect-analyse-variant]').text();
 }
 
-function sendMsgAddTip(fenList, moveList) {
+function sendMsgAddTip(positions) {
   const name = jQuery('#inputTitle').val();
   const url = jQuery('#inputUrl').val();
   const variant = getVariant();
@@ -443,8 +441,7 @@ function sendMsgAddTip(fenList, moveList) {
       trap: {
         id: Utils.purge(name),
         name,
-        fen: fenList,
-        nextMoves: moveList,
+        positions,
         url,
         variant,
       },

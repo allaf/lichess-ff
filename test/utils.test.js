@@ -78,12 +78,6 @@ describe('utils.test.js ', () => {
     expect(fen).toBe(expected);
   });
 
-  it('db should be coherent', () => {
-    testData.games.forEach((el) => {
-      expect(el.fen.length).toBe(el.nextMoves.length);
-    });
-  });
-
   it('Should fetchTips as white', () => {
     let currentGame = {
       fen: 'r2qkbnr/ppp2ppp/2np4/4p2b/2B1P3/2N2N1P/PPPP1PP1/R1BQK2R',
@@ -114,19 +108,22 @@ describe('utils.test.js ', () => {
     let tips = testData.games.filter(
       (t) => t.url === 'https://youtu.be/tYOnym3ZINU?t=475'
     );
-    tips = utils.getListLinks(tips, tips[0].fen[4].split(' ')[0]);
+    tips = utils.getListLinks(tips, tips[0].positions[4].fen.split(' ')[0]);
 
     expect(tips.length).toBe(1);
     expect(tips[0]).toBe(
-      '<li><span class=\"tip-move\">Qb4+</span> : <a target="_blank" href="https://youtu.be/tYOnym3ZINU?t=475">Englund gambit (scandi)</a></li>'
+      '<li><span class="tip-move">Qb4+</span> : <a target="_blank" href="https://youtu.be/tYOnym3ZINU?t=475">Englund gambit (scandi)</a></li>'
     );
   });
 
   it('Should getListLinks with multiple tips', () => {
-    let tips = testData.games.filter((t) =>
-      t.fen.includes(
-        'r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7'
-      )
+    let tips = testData.games.filter(
+      (t) =>
+        t.positions.filter(
+          (x) =>
+            x.fen ===
+            'r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7'
+        ).length
     );
     let links = utils.getListLinks(
       tips,
@@ -135,13 +132,13 @@ describe('utils.test.js ', () => {
 
     expect(tips.length).toBe(3);
     expect(links[0]).toBe(
-      '<li><span class=\"tip-move\">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=522">Venus trap</a></li>'
+      '<li><span class="tip-move">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=522">Venus trap</a></li>'
     );
     expect(links[1]).toBe(
-      '<li><span class=\"tip-move\">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=386">Mars trap</a></li>'
+      '<li><span class="tip-move">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=386">Mars trap</a></li>'
     );
     expect(links[2]).toBe(
-      '<li><span class=\"tip-move\">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=67">Hercule trap</a></li>'
+      '<li><span class="tip-move">Nc3</span> : <a target="_blank" href="https://youtu.be/L-jTuKWJAG8?t=67">Hercule trap</a></li>'
     );
   });
 

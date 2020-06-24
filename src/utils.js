@@ -4,17 +4,15 @@ var utils = {
   },
 
   fetchTips: (currentGame, db) => {
-    // eslint-disable-next-line no-undef
-    return db.games.filter((game) => {
-      return (
+    return db.games.filter(
+      (game) =>
         currentGame.variant.name === game.variant &&
-        game.fen.filter(
-          (fen) =>
-            fen.split(' ')[0] === currentGame.fen &&
-            fen.split(' ')[1] === currentGame.color.substr(0, 1)
+        game.positions.filter(
+          (pos) =>
+            pos.fen.split(' ')[0] === currentGame.fen &&
+            pos.fen.split(' ')[1] === currentGame.color.substr(0, 1)
         ).length
-      );
-    });
+    );
   },
 
   extractTitle: (pgn) => {
@@ -23,8 +21,8 @@ var utils = {
   },
 
   tipTuple: (tip, gameFen) => {
-    const moveIdx = tip.fen.findIndex((f) => f.split(' ')[0] === gameFen);
-    return { url: tip.url, move: tip.nextMoves[moveIdx], name: tip.name };
+    const posIdx = tip.positions.findIndex((p) => p.fen.split(' ')[0] === gameFen);
+    return { url: tip.url, move: tip.positions[posIdx].move, name: tip.name };
   },
 
   tupleToHtml: (tuple) => {

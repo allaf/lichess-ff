@@ -189,8 +189,7 @@ function updateTip(obj, tipData) {
   settings.method = 'PUT';
   settings.url = RESTBD_URL + '/' + obj._id;
   settings.data = JSON.stringify({
-    nextMoves: obj.nextMoves.concat(tipData.move),
-    fen: obj.fen.concat(tipData.fen),
+    positions: obj.positions.concat({ fen: tipData.fen, move: tipData.move }),
   });
 
   return jQuery.ajax(settings);
