@@ -30,7 +30,6 @@ gameSubject.subscribe((game) => {
 
 function main() {
   monitorChange();
-
   insertTipTab();
   updateGame();
   jQuery('.mchat__tab').click(function () {
@@ -47,7 +46,9 @@ function main() {
       contentObj.addClass('tips-content');
       contentObj.html(buildHtmlTips(gameSubject.getValue()));
     } else {
+      const contentObj = jQuery('.mchat__content');
       jQuery('.tips-content').empty();
+      contentObj.removeClass('.tips-content');
     }
   });
   jQuery('.mchat__tab.tips').click();
@@ -133,7 +134,7 @@ function monitorChange() {
             updateGame();
           }
         },
-        storage.delay ? !storage.delay : delay
+        storage.delay ? storage.delay : delay
       );
     });
   });
@@ -142,7 +143,7 @@ function monitorChange() {
 function updateGame() {
   const fen = boardToFen();
   if (fen.includes('a')) {
-    console.error('BAD FEN, please manually reload');
+    console.error('BAD FEN, please manually reload', fen);
     return;
   }
 
