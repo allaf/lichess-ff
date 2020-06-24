@@ -10,7 +10,6 @@ const ApiUtils = apiUtils;
 const brw = browser;
 /* eslint-enable no-undef */
 
-const imgSrc = brw.runtime.getURL('img/ajax-loader.gif');
 const sadHorsey = brw.runtime.getURL('img/lichess_logo_500_sad.png');
 const happyHorsey = brw.runtime.getURL('img/lichess_logo_500.png');
 
@@ -21,9 +20,8 @@ gameSubject.subscribe((game) => {
   if (game) {
     const tipsDiv = jQuery('.mchat__content.tips-content');
     if (tipsDiv) {
-      jQuery('#tips-wait').show();
       tipsDiv.html(buildHtmlTips(game));
-      jQuery('#tips-wait').hide();
+      jQuery('#tips-refresh').removeClass('working')
     }
   }
 });
@@ -48,7 +46,7 @@ function main() {
     } else {
       const contentObj = jQuery('.mchat__content');
       jQuery('.tips-content').empty();
-      contentObj.removeClass('.tips-content');
+      contentObj.removeClass('tips-content');
     }
   });
   jQuery('.mchat__tab.tips').click();
@@ -111,7 +109,6 @@ function insertTipTab() {
   jQuery('.mchat__tabs.nb_2').append(`
     <div id="tips" class="mchat__tab tips"><span>Tips</span>
       <button id="tips-refresh" data-icon="P" class="${btClass}"></button>
-      <img id="tips-wait" src="${imgSrc}">
     </div>
     `);
 
@@ -131,6 +128,7 @@ function monitorChange() {
       setTimeout(
         function () {
           if (isMyTurn()) {
+            jQuery('#tips-refresh').addClass('working')
             updateGame();
           }
         },

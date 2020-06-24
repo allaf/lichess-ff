@@ -7,8 +7,6 @@ const Utils = utils;
 const jQuery = $;
 /* eslint-enable no-undef */
 
-//TODO Base avec tuples
-
 let TOKEN;
 let APIKEY;
 let RESTDB;

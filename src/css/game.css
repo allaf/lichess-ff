@@ -3,6 +3,11 @@
   font-size: larger;
 }
 
+.working {
+  /* color: greenyellow; */
+  color: red;
+}
+
 .tip-info {
   border: none;
   font-weight: bolder;
