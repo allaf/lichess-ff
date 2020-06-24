@@ -57,22 +57,24 @@ function buildHtmlTips(currentGame) {
   const tips = Utils.fetchTips(currentGame, DB);
   let html = '';
   let backUrl;
+  let bottomText = '';
+  let linkText = '';
   if (tips.length) {
     backUrl = happyHorsey;
     const links = Utils.getListLinks(tips, currentGame.fen);
     const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
-    const bottomText = Array.from(distinctMoves).join(' ');
-    html += `<span class="tip-info">${bottomText}</strong></span>`;
-
-    html += `<ul class="tip">${links.join('')}</ul>`;
+    bottomText = Array.from(distinctMoves).join(' ');
+    linkText = links.join('');
   } else {
     backUrl = sadHorsey;
-    html += '<div class="no-tips">No tips found :(</div>';
+    bottomText = 'No tips found :(';
   }
+  html += `<span class="tip-info">${bottomText}</span>`;
+  html += `<ul class="tip">${linkText}</ul>`;
 
-  const divContent = jQuery('.tips-content');
-  if (divContent) {
-    divContent.css('background-image', `url('${backUrl}')`);
+  const divTipContent = jQuery('.tips-content');
+  if (divTipContent) {
+    divTipContent.css('background-image', `url('${backUrl}')`);
   }
 
   return html;
