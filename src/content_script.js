@@ -53,7 +53,7 @@ function main() {
 }
 
 function buildHtmlTips(currentGame) {
-  const tips = Utils.fetchTips(currentGame, DB);
+  const tips = Utils.fetchTips(currentGame, DB);console.log(currentGame)
   let html = '';
   let backUrl;
   let bottomText = '';

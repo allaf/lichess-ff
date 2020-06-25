@@ -11,7 +11,6 @@ const op = rxjs.operators;
 /* eslint-enable no-undef */
 
 // data-icon Bx  u:flechebas x:save /:cloud-save
-const exampleStudyId = 'Of3mcPk8';
 const DELAY_AUTO = 1000;
 const keyRightEvent = new KeyboardEvent('keydown', { which: 39 });
 const keyLeftEvent = new KeyboardEvent('keydown', { which: 37 });
@@ -100,7 +99,7 @@ function createTipForm() {
   // STUDY ////////////////////////////////////////
 
   const labelStudyId = createLabel('Study id');
-  const inputStudyId = createInput('inputStudyId', 10).val(exampleStudyId);
+  const inputStudyId = createInput('inputStudyId', 10);
 
   const labelSelectChapter = createLabel('Chapter');
   const selectChapter = jQuery('<select/>', {

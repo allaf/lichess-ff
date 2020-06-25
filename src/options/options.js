@@ -19,7 +19,7 @@ function restoreOptions() {
     doc.querySelector('#token').value = res.token ? res.token.trim() : '';
     doc.querySelector('#apiKey').value = res.apiKey ? res.apiKey.trim() : '';
     doc.querySelector('#restdb').value = res.restdb ? res.restdb.trim() : '';
-    doc.querySelector('#delay').value = res.delay ? res.delay.trim() : '';
+    doc.querySelector('#delay').value = res.delay ? res.delay : 300;
   });
 }
 
