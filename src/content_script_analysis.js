@@ -1,7 +1,5 @@
 'use strict';
 
-console.log('content analysis starts');
-
 /* eslint-disable no-undef */
 const jQuery = $;
 const brw = browser;
@@ -367,7 +365,6 @@ function fetchAndSetChapter(url) {
 function goFirstMove(color = 'white') {
   let max = 80;
   while (!isFirstMove() && max) {
-    console.log('key left');
     document.dispatchEvent(keyLeftEvent);
     max--;
   }
@@ -386,7 +383,6 @@ function baseLoadChapterMult(color) {
       op.concatMap((url) =>
         rx.from(jQuery.get(`${url}.pgn`)).pipe(
           op.tap((pgn) => {
-            // console.log(url, pgn.substr(0, 100).split(':')[1].split('"')[0]);
             jQuery('#selectChapter').val(url);
             jQuery('#inputTitle').val(
               jQuery('#selectChapter option:selected').text()
@@ -441,7 +437,6 @@ function handleAutoRead() {
     document.dispatchEvent(keyRightEvent);
   }
   if (positions.length) {
-    console.log('sending addtip', positions);
     sendMsgAddTip(positions).then();
   }
 }

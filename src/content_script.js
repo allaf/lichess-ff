@@ -19,7 +19,7 @@ gameSubject.subscribe((game) => {
     const tipsDiv = jQuery('.mchat__content.tips-content');
     if (tipsDiv) {
       tipsDiv.html(buildHtmlTips(game));
-      jQuery('#tips-refresh').removeClass('working')
+      jQuery('#tips-refresh').removeClass('working');
     }
   }
 });
@@ -51,7 +51,7 @@ function main() {
 }
 
 function buildHtmlTips(currentGame) {
-  const tips = Utils.fetchTips(currentGame, DB);console.log(currentGame)
+  const tips = Utils.fetchTips(currentGame, DB);
   let html = '';
   let backUrl;
   let bottomText = '';
@@ -126,7 +126,7 @@ function monitorChange() {
       setTimeout(
         function () {
           if (isMyTurn()) {
-            jQuery('#tips-refresh').addClass('working')
+            jQuery('#tips-refresh').addClass('working');
             updateGame();
           }
         },
