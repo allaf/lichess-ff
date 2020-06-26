@@ -21,7 +21,9 @@ var utils = {
   },
 
   tipTuple: (tip, gameFen) => {
-    const posIdx = tip.positions.findIndex((p) => p.fen.split(' ')[0] === gameFen);
+    const posIdx = tip.positions.findIndex(
+      (p) => p.fen.split(' ')[0] === gameFen
+    );
     return { url: tip.url, move: tip.positions[posIdx].move, name: tip.name };
   },
 
@@ -32,7 +34,7 @@ var utils = {
   getSortedTuples: (tips, gameFen) =>
     tips
       .map((t) => utils.tipTuple(t, gameFen))
-      .sort((x, y) => (x.move === y.move ? x.name < y.name : x.move < y.move)),
+      .sort((x, y) => (x.move === y.move ? x.name > y.name : x.move > y.move)),
 
   getListLinks: (tips, gameFen) =>
     utils.getSortedTuples(tips, gameFen).map(utils.tupleToHtml),
@@ -135,16 +137,17 @@ var utils = {
     return str.replace(/[\s`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
   },
   parseChapters: (pgn) => {
-    const regexpEvent = /\[Event "[^:]*: (.*)"\]/gm;
-    const regexpSite = /\[Site "(https:\/\/lichess\.org\/study\/.*)"]/gm;
-    const matchesEvent = [...pgn.matchAll(regexpEvent)];
-    const matchesSite = [...pgn.matchAll(regexpSite)];
-
-    const mapped = matchesEvent.map((x, i) => {
-      return { name: x[1], val: matchesSite[i][1] };
-    });
-
-    return mapped;
+    return pgn
+      .split('[Event')
+      .map((event) => {
+        event = event.replace(/\[Opening.*/g, '');
+        const regexpEvent = /.*"[^:]*: (.*)"\][\s\S]+?1\.\s/m;
+        const regexpSite = /\[Site "(https:\/\/lichess\.org\/study\/.*)"]/gm;
+        const siteFound = regexpSite.exec(event);
+        const found = regexpEvent.exec(event);
+        return found ? { name: found[1], val: siteFound[1] } : null;
+      })
+      .filter((x) => !!x);
   },
 };
 

@@ -35,12 +35,12 @@ function main() {
     jThis.addClass(activeTabClass);
 
     if (jThis.hasClass('tips')) {
-      const contentObj = jQuery('.mchat__content');
-      contentObj.empty();
-      contentObj.removeClass();
-      contentObj.addClass('mchat__content');
-      contentObj.addClass('tips-content');
-      contentObj.html(buildHtmlTips(gameSubject.getValue()));
+      const tipDiv = jQuery('.mchat__content');
+      tipDiv.empty();
+      tipDiv.removeClass();
+      tipDiv.addClass('mchat__content');
+      tipDiv.addClass('tips-content');
+      tipDiv.html(buildHtmlTips(gameSubject.getValue()));
     } else {
       const contentObj = jQuery('.mchat__content');
       jQuery('.tips-content').empty();
@@ -54,19 +54,20 @@ function buildHtmlTips(currentGame) {
   const tips = Utils.fetchTips(currentGame, DB);
   let html = '';
   let backUrl;
-  let bottomText = '';
+  let infoText = '';
   let linkText = '';
   if (tips.length) {
     backUrl = happyHorsey;
     const links = Utils.getListLinks(tips, currentGame.fen);
     const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
-    bottomText = Array.from(distinctMoves).join(' ');
+    infoText = Array.from(distinctMoves).join(' ');
     linkText = links.join('');
+    //TODO draw lines ??
   } else {
     backUrl = sadHorsey;
-    bottomText = 'No tips found :(';
+    infoText = 'No tips found :(';
   }
-  html += `<span class="tip-info">${bottomText}</span>`;
+  html += `<span class="tip-info">${infoText}</span>`;
   html += `<ul class="tip">${linkText}</ul>`;
 
   const divTipContent = jQuery('.tips-content');

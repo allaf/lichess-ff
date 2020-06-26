@@ -302,9 +302,8 @@ function createTipForm() {
 
   function handleLoadStudy() {
     const studyId = jQuery('#inputStudyId').val();
-    jQuery.get(`https://lichess.org/study/${studyId}.pgn`).done((x) => {
-      //TODO avoid introduction
-      const chapters = Utils.parseChapters(x);
+    jQuery.get(`https://lichess.org/study/${studyId}.pgn`).done((pgn) => {
+      const chapters = Utils.parseChapters(pgn);
       jQuery('#selectChapter > option').remove();
       jQuery('#selectChapterMult > option').remove();
       chapters.forEach((chapt) => {

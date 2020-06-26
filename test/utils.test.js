@@ -142,13 +142,10 @@ describe('utils.test.js ', () => {
     );
   });
 
-  it('Study pgn parse chapter', () => {
-    let res = utils.parseChapters(testData.studyPgn);
+  it('Study pgn parse chapter only', () => {
+    let res = utils.parseChapters(testData.studyPgnFull);
+    expect(res.length).toEqual(20);
     expect(res).toEqual([
-      {
-        name: 'Introduction',
-        val: 'https://lichess.org/study/nsIdXAP4/dTh2YVca',
-      },
       {
         name: 'Kostic trap',
         val: 'https://lichess.org/study/nsIdXAP4/pcltmSpW',
@@ -158,8 +155,76 @@ describe('utils.test.js ', () => {
         val: 'https://lichess.org/study/nsIdXAP4/HDfsRKmI',
       },
       {
+        name: 'Benko trap',
+        val: 'https://lichess.org/study/nsIdXAP4/Ws7f2RsU',
+      },
+      {
+        name: "Noah's ark trap",
+        val: 'https://lichess.org/study/nsIdXAP4/iDy3RVPH',
+      },
+      {
+        name: 'Budapest trap',
+        val: 'https://lichess.org/study/nsIdXAP4/GbZwHrL3',
+      },
+      {
+        name: 'Legal trap',
+        val: 'https://lichess.org/study/nsIdXAP4/kKuXZCFn',
+      },
+      {
+        name: 'Kieninger trap',
+        val: 'https://lichess.org/study/nsIdXAP4/7XExW1kC',
+      },
+      {
+        name: 'Elephant trap',
+        val: 'https://lichess.org/study/nsIdXAP4/sBlqHPxm',
+      },
+      {
+        name: 'Rubinstein trap',
+        val: 'https://lichess.org/study/nsIdXAP4/Fb0XeV2q',
+      },
+      {
+        name: 'Mortimer trap',
+        val: 'https://lichess.org/study/nsIdXAP4/tYuaV5y8',
+      },
+      {
+        name: 'Tarrasch trap',
+        val: 'https://lichess.org/study/nsIdXAP4/9hiprqf0',
+      },
+      {
+        name: 'Siberian trap',
+        val: 'https://lichess.org/study/nsIdXAP4/HulI995d',
+      },
+      {
+        name: 'Vienna trap',
+        val: 'https://lichess.org/study/nsIdXAP4/9pOs006q',
+      },
+      {
+        name: 'From Gambit trap',
+        val: 'https://lichess.org/study/nsIdXAP4/ycoOzBb7',
+      },
+      {
+        name: 'TrickyMate Trap (Fajratowitz)',
+        val: 'https://lichess.org/study/nsIdXAP4/dfBkh994',
+      },
+      {
+        name: 'Fried Liver Attack',
+        val: 'https://lichess.org/study/nsIdXAP4/Iv91Z2Nt',
+      },
+      {
+        name: 'Center Game Trap 1: White',
+        val: 'https://lichess.org/study/nsIdXAP4/tvuFoykN',
+      },
+      {
         name: 'Center Game Trap 2: Black',
         val: 'https://lichess.org/study/nsIdXAP4/SqyV0896',
+      },
+      {
+        name: 'Center Game Trap 3: Black',
+        val: 'https://lichess.org/study/nsIdXAP4/8GzqeqXY',
+      },
+      {
+        name: 'Center Game Trap 4: White',
+        val: 'https://lichess.org/study/nsIdXAP4/A8AmzBgR',
       },
     ]);
   });
