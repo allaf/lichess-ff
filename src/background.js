@@ -25,7 +25,7 @@ var settingsRequest = {
   async: true,
   crossDomain: true,
   url: RESTBD_URL,
-  method: 'PUT',
+  method: '',
   headers: {
     'content-type': 'application/json',
     'x-apikey': '',
@@ -149,20 +149,20 @@ brw.runtime.onMessage.addListener((msg, sender, sendReply) => {
     getTip(msg.tip._id).done((resp) => {
       updateTip(resp, msg.tip)
         .done(() => {
-          // console.log('upload done ok', updDone);
-          //TODO update info
+          brw.tabs.sendMessage(sender.tab.id, { id: msg.id, status: 'ok' });
         })
         .fail(() => {
+          brw.tabs.sendMessage(sender.tab.id, { id: msg.id, status: 'ko' });
           console.error('put tip failed');
         });
     });
   } else if (msg.id === 'add-tip') {
     postTip(msg.trap)
       .done(() => {
-        // console.log('post done ok', postRes);
-        //TODO update info
+        brw.tabs.sendMessage(sender.tab.id, { id: msg.id, status: 'ok' });
       })
       .fail(() => {
+        brw.tabs.sendMessage(sender.tab.id, { id: msg.id, status: 'ko' });
         console.error('post tip failed');
       });
   }
@@ -172,7 +172,7 @@ function postTip(tip) {
   var settings = Object.assign({}, settingsRequest);
   settings.method = 'POST';
   settings.data = JSON.stringify(tip);
-  return jQuery.ajax(settings); //TODO why not in contentscript ?
+  return jQuery.ajax(settings);
 }
 
 function getTip(_id) {

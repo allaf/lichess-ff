@@ -1,7 +1,5 @@
 'use strict';
 
-//FIXME tab chat broken on first click
-
 /* eslint-disable no-undef */
 const jQuery = $;
 const rx = rxjs;

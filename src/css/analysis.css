@@ -97,3 +97,15 @@ h2::after {
   border-radius: 3px 3px 3px 3px;
   background: #73533b;
 }
+
+.request-status {
+  display: none;
+}
+
+.red {
+  color: #c33;
+}
+
+.green {
+  color: #629924;
+}

@@ -23,7 +23,29 @@ brw.runtime.onMessage.addListener((msg) => {
     select.empty();
     populateWithTips(select, msg.db);
   }
+  if (msg.id === 'add-tip') {
+    fadeInOut('#add-status', msg.status);
+  }
+  if (msg.id === 'update-tip') {
+    fadeInOut('#upd-status', msg.status);
+  }
 });
+
+function fadeInOut(selector, status) {
+  const el = jQuery(selector);
+  el.removeClass('red');
+  el.removeClass('green');
+  if (status === 'ok') {
+    el.attr('data-icon', 'E');
+    el.addClass('green');
+  }
+  if (status === 'ko') {
+    el.attr('data-icon', '✗');
+    el.addClass('red');
+  }
+  el.fadeToggle('slow');
+  el.fadeToggle(3000);
+}
 
 brw.runtime.sendMessage('get-data').then((res) => {
   DB = res;
@@ -66,7 +88,10 @@ function createTipForm() {
   const divAdd = jQuery('<div/>', { class: 'divAdd' });
   const divContentAdd = jQuery('<div/>', { class: 'divContentAdd' });
   const titleAdd = jQuery('<h2/>')
-    .html('Add a new Trap')
+    .html(
+      `Add a new Trap
+      <span id="add-status" data-icon="" class="request-status"/>`
+    )
     .click(() => {
       divContentAdd.slideToggle('slow');
     });
@@ -115,8 +140,8 @@ function createTipForm() {
   const btLoadStudy = createBt(
     'btLoadStudy',
     '',
-    'marginL button button-thin action text',
-    'P'
+    'marginL fbt action text',
+    'B'
   ).click(handleLoadStudy);
 
   const labelChapterUrl = createLabel('Chapt url');
@@ -199,7 +224,11 @@ function createTipForm() {
   const divUpd = jQuery('<div/>', { class: 'divUpd' });
   const divContentUpd = jQuery('<div/>', { class: 'divContentUpd' });
   const titleUpd = jQuery('<h2/>')
-    .html('Add one Move on existing Trap')
+    .html(
+      `Add one Move on existing Trap 
+      <span id="upd-status" data-icon="" class="request-status"/>
+      `
+    )
     .click(() => {
       divContentUpd.slideToggle('slow');
     });
@@ -216,8 +245,8 @@ function createTipForm() {
   const btRefreshMove = createBt(
     'tipsRefreshMove',
     '',
-    'marginL button button-thin action text',
-    'P'
+    'marginL fbt action text',
+    'B'
   ).click(readNextMove);
 
   const btLoadTip = createBt(
@@ -237,19 +266,17 @@ function createTipForm() {
     'submit button text confirm button-blue',
     'O'
   ).click(() => {
-    //TODO show update finshed success
     const _id = jQuery('#selectTip').val();
     const fen = jQuery('.analyse__underboard__fen').val();
     const activeMove = jQuery('#inputMove').val();
-    updateTrap(_id, fen, activeMove);
+    if (activeMove) {
+      updateTrap(_id, fen, activeMove);
+    }
   });
 
-  const btRefreshTip = createBt(
-    '',
-    '',
-    'marginL button button-thin action text',
-    'P'
-  ).click(refreshTipsList);
+  const btRefreshTip = createBt('', '', 'marginL fbt action text', 'B').click(
+    refreshTipsList
+  );
 
   divUpdInput1.append(labelMove, inputMove, btRefreshMove);
   divUpdInput2.append(labelSelect, selectTip, btRefreshTip, btLoadTip);
@@ -300,7 +327,6 @@ function createTipForm() {
           })
           .fail(() => {
             console.warn('failed to load chapter ', chapt.val + '.pgn');
-            //TODO choper le chapter quand meme via link?
             jQuery(`.selectChapter>option[value="${chapt.val}"]`)
               .prop('disabled', true)
               .addClass('private');
@@ -310,10 +336,9 @@ function createTipForm() {
   }
 
   function refreshTipsList() {
-    brw.runtime.sendMessage('get-data-refetch').then(() => {});
+    brw.runtime.sendMessage('get-data-refetch');
   }
 
-  //TODO form validate mandatory fields
   return outer;
 }
 
@@ -390,12 +415,7 @@ function handleLoadChapterMultBlack() {
 }
 
 function updateTrap(id, fen, move) {
-  //TODO wait indicator
-  brw.runtime
-    .sendMessage({ id: 'update-tip', tip: { _id: id, fen, move } })
-    .then((res) => {
-      console.log('content-script received reply', res);
-    });
+  brw.runtime.sendMessage({ id: 'update-tip', tip: { _id: id, fen, move } });
 }
 
 function insertForm() {
