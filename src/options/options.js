@@ -25,8 +25,10 @@ function restoreOptions() {
     doc.getElementById('restdb').value = res.restdb ? res.restdb.trim() : '';
     doc.getElementById('startColor').value = res.startColor
       ? res.startColor
-      : '';
-    doc.getElementById('destColor').value = res.destColor ? res.destColor : '';
+      : '#298EF6';
+    doc.getElementById('destColor').value = res.destColor
+      ? res.destColor
+      : '#FF9E18';
     doc.getElementById('delay').value = res.delay ? res.delay : 300;
     doc.getElementById('showSquares').checked =
       res.showSquares !== undefined ? res.showSquares : true;
