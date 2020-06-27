@@ -1,11 +1,27 @@
+.tip-square {
+  opacity: 0.5;
+  /* border-radius: 15px; */
+}
+/*
+.square-from {
+  background-color: #fd6500;
+}
+.square-to {
+  background-color: #2c04e0;  
+}
+*/
+
 .tip-move {
   font-weight: bolder;
   font-size: larger;
 }
 
 .working {
-  /* color: greenyellow; */
-  color: red;
+  color: greenyellow;
+}
+
+button#tips-refresh.fbt {
+  line-height: 1em;
 }
 
 .tip-info {

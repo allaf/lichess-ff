@@ -14,11 +14,11 @@ let RESTDB;
 const RESTBD_URL = 'https://chesstips-02ee.restdb.io/rest/lichess-ff-db';
 const URL_MATCH = 'https://lichess.org/*';
 const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
-// const FILE_JQUERY_UI = '/libs/jquery-ui.js';
 const FILE_RXJS = '/libs/rxjs.umd.min.js';
+const FILE_CHESSJS = '/libs/chess.js';
 const FILE_UTILS = '/src/utils.js';
 const FILE_API_UTILS = '/src/apiUtils.js';
-const FILE_CONTENT_SCRIPT = '/src/content_script.js';
+const FILE_CONTENT_SCRIPT_GAME = '/src/content_script_game.js';
 const FILE_CONTENT_SCRIPT_ANALYSIS = '/src/content_script_analysis.js';
 
 var settingsRequest = {
@@ -86,6 +86,18 @@ function loadContentAnalysis(tabId, apiKey, restdb) {
     brw.tabs.insertCSS(tabId, { file: '/src/css/analysis.css' });
     // brw.tabs.insertCSS(tabId, { file: '/src/css/jquery-ui.css' });
   });
+}
+
+function loadContentScript(tabId) {
+  // eslint-disable-next-line no-undef
+  utils.executeScripts(tabId, [
+    { file: FILE_JQUERY },
+    { file: FILE_RXJS },
+    { file: FILE_UTILS },
+    { file: FILE_CHESSJS },
+    { file: FILE_API_UTILS },
+    { file: FILE_CONTENT_SCRIPT_GAME },
+  ]);
 }
 
 function loadContentGame(tabInfo, token, apiKey, restdb) {
@@ -191,15 +203,4 @@ function updateTip(obj, tipData) {
   });
 
   return jQuery.ajax(settings);
-}
-
-function loadContentScript(tabId) {
-  // eslint-disable-next-line no-undef
-  utils.executeScripts(tabId, [
-    { file: FILE_JQUERY },
-    { file: FILE_RXJS },
-    { file: FILE_UTILS },
-    { file: FILE_API_UTILS },
-    { file: FILE_CONTENT_SCRIPT },
-  ]);
 }

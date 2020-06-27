@@ -149,6 +149,19 @@ var utils = {
       })
       .filter((x) => !!x);
   },
+
+  squareNameToPxCoord: (square, boardWidth, color) => {
+    const unit = boardWidth / 8;
+    let col, line;
+    if (color === 'white') {
+      col = square.substr(0, 1).charCodeAt(0) - 96 - 1;
+      line = 8 - Number(square.substr(1, 1));
+    } else if (color === 'black') {
+      col = 8 - (square.substr(0, 1).charCodeAt(0) - 96);
+      line = Number(square.substr(1, 1)) - 1;
+    }
+    return { x: col * unit, y: line * unit };
+  },
 };
 
 try {

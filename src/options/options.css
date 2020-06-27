@@ -15,3 +15,12 @@ form {
 label {
   font-size: 1.3rem;
 }
+
+.check {
+  vertical-align: text-bottom;
+  margin-left: 10px;
+}
+
+.disabled {
+  color: gray;
+}
