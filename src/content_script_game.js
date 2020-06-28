@@ -45,9 +45,9 @@
     if (tips.length) {
       const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
       const width = jQuery('cg-container').innerWidth();
-      const chess = new ChessJs(
-        `${currentGame.fen} ${currentGame.color.substr(0, 1)} - - 1 1`
-      );
+      const col = currentGame.color.substr(0, 1);
+      const fullFen = `${currentGame.fen} ${col} KQkq - 1 1`;
+      const chess = new ChessJs(fullFen);
       jQuery('square.tip-square').remove();
       distinctMoves.forEach((tip) => {
         drawMove(tip, currentGame.color, width, chess, jQuery('cg-board'));
@@ -72,7 +72,14 @@
   });
 
   function drawMove(move, color, boardWidth, chess, jBoard) {
-    chess.move(move);
+    try {
+      if (null === chess.move(move)) {
+        return;
+      }
+    } catch (error) {
+      console.warn('chess.js cannot make move ' + move, error);
+      return;
+    }
     const { from, to } = chess.history({ verbose: true })[0];
     chess.undo();
     highlightSquare(
@@ -106,6 +113,7 @@
     monitorChange();
     insertTipTab();
     updateGame();
+
     jQuery('.mchat__tab').click(function () {
       const jThis = jQuery(this);
       const activeTabClass = 'mchat__tab-active';
@@ -165,7 +173,6 @@
       tipInfo.append(check);
     }
     const ul = jQuery('<ul/>', { class: 'tip' }).html(linkText);
-
     const divTipContent = jQuery('.tips-content');
     if (divTipContent) {
       divTipContent.css('background-image', `url('${backUrl}')`);
