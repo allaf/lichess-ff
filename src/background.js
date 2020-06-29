@@ -16,6 +16,7 @@ const URL_MATCH = 'https://lichess.org/*';
 const FILE_JQUERY = '/libs/jquery-3.5.1.min.js';
 const FILE_RXJS = '/libs/rxjs.umd.min.js';
 const FILE_CHESSJS = '/libs/chess.js';
+const FILE_D3 = '/libs/d3.min.js';
 const FILE_UTILS = '/src/utils.js';
 const FILE_API_UTILS = '/src/apiUtils.js';
 const FILE_CONTENT_SCRIPT_GAME = '/src/content_script_game.js';
@@ -95,6 +96,7 @@ function loadContentScript(tabId) {
     { file: FILE_RXJS },
     { file: FILE_UTILS },
     { file: FILE_CHESSJS },
+    { file: FILE_D3 },
     { file: FILE_API_UTILS },
     { file: FILE_CONTENT_SCRIPT_GAME },
   ]);

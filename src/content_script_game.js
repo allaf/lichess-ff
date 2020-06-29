@@ -13,13 +13,16 @@
   const ApiUtils = apiUtils;
   const brw = browser;
   const ChessJs = Chess;
+  const D3 = d3;
   /* eslint-enable no-undef */
 
   const SAD_HORSEY = brw.runtime.getURL('img/lichess_logo_500_sad.png');
   const HAPPY_HORSEY = brw.runtime.getURL('img/lichess_logo_500.png');
   let START_COLOR = '';
   let DEST_COLOR = '';
+  let ARROWS_COLOR = '';
   let SHOW_SQUARES = '';
+  let SHOW_ARROWS = '';
   let DB = [];
 
   const local = brw.storage.local.get();
@@ -27,6 +30,8 @@
     START_COLOR = storage.startColor;
     DEST_COLOR = storage.destColor;
     SHOW_SQUARES = storage.showSquares;
+    SHOW_ARROWS = storage.showArrows;
+    ARROWS_COLOR = storage.arrowsColor;
   });
 
   const gameSubject = new rx.BehaviorSubject();
@@ -41,34 +46,32 @@
     }
   });
 
-  function showSquares(tips, currentGame) {
-    if (tips.length) {
-      const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
-      const width = jQuery('cg-container').innerWidth();
-      const col = currentGame.color.substr(0, 1);
-      const fullFen = `${currentGame.fen} ${col} KQkq - 1 1`;
-      const chess = new ChessJs(fullFen);
-      jQuery('square.tip-square').remove();
-      distinctMoves.forEach((tip) => {
-        drawMove(tip, currentGame.color, width, chess, jQuery('cg-board'));
-      });
-    }
-  }
-
-  function removeSquares() {
+  function showSquares(tips, currentGame, distinctMoves) {
+    // const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen); //TODO pass as argument
+    const width = jQuery('cg-container').innerWidth();
+    const col = currentGame.color.substr(0, 1);
+    const fullFen = `${currentGame.fen} ${col} KQkq - 1 1`;
+    const chess = new ChessJs(fullFen);
     jQuery('square.tip-square').remove();
+    distinctMoves.forEach((tip) => {
+      drawMove(tip, currentGame.color, width, chess, jQuery('cg-board'));
+    });
   }
 
   jQuery(window).resize(function () {
-    const local = brw.storage.local.get();
-    local.then((storage) => {
-      if (storage.showSquares) {
-        // redraw higlhights
-        const currentGame = gameSubject.getValue();
-        const tips = Utils.fetchTips(currentGame, DB);
-        showSquares(tips, currentGame);
+    const currentGame = gameSubject.getValue();
+    const tips = Utils.fetchTips(currentGame, DB);
+    let distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
+    if (SHOW_SQUARES) {
+      if (tips.length) {
+        showSquares(tips, currentGame, distinctMoves);
       }
-    });
+    }
+    if (SHOW_ARROWS) {
+      if (tips.length) {
+        drawArrows(tips, currentGame, distinctMoves);
+      }
+    }
   });
 
   function drawMove(move, color, boardWidth, chess, jBoard) {
@@ -136,6 +139,61 @@
     jQuery('.mchat__tab.tips').click();
   }
 
+  function drawArrows(tips, currentGame, distinctMoves) {
+    const width = jQuery('cg-container').innerWidth();
+    const col = currentGame.color.substr(0, 1);
+    const fullFen = `${currentGame.fen} ${col} KQkq - 1 1`;
+    const chess = new ChessJs(fullFen);
+    jQuery('cg-board>svg#svg-tips').remove();
+    const drawColor = ARROWS_COLOR;
+
+    //TODO drawArrows
+    if (!jQuery('cg-board>svg#svg-tips').length) {
+      var svgTips = D3.select('cg-board').append('svg').attr('id', 'svg-tips');
+      svgTips
+        .append('defs')
+        .attr('id', 'tips-defs')
+        .append('marker')
+        .attr('id', 'arrowhead-tip')
+        .attr('orient', 'auto')
+        .attr('markerWidth', 4)
+        .attr('markerHeight', 8)
+        .attr('refX', 2.05)
+        .attr('refY', 2.01)
+        .append('path')
+        .attr('d', 'M0,0 V4 L3,2 Z')
+        .attr('fill', drawColor);
+
+      distinctMoves.forEach((move) => {
+        try {
+          if (null === chess.move(move)) {
+            return;
+          }
+        } catch (error) {
+          console.warn('chess.js cannot make move ' + move, error);
+          return;
+        }
+        const { from, to } = chess.history({ verbose: true })[0];
+        chess.undo();
+        const col = currentGame.color;
+        const offset = { x: width / 16, y: width / 16 };
+        const pos1 = Utils.squareNameToPxCoord(from, width, col, offset);
+        const pos2 = Utils.squareNameToPxCoord(to, width, col, offset);
+
+        svgTips
+          .append('line')
+          .attr('stroke', drawColor)
+          .attr('stroke-linecap', 'round')
+          .attr('stroke-width', width / 52)
+          .attr('x1', pos1.x)
+          .attr('y1', pos1.y)
+          .attr('x2', pos2.x)
+          .attr('y2', pos2.y)
+          .attr('marker-end', 'url(#arrowhead-tip)');
+      });
+    }
+  }
+
   function buildHtmlTips(currentGame) {
     const tips = Utils.fetchTips(currentGame, DB);
     let backUrl;
@@ -149,35 +207,22 @@
       linkText = links.join('');
 
       if (SHOW_SQUARES) {
-        showSquares(tips, currentGame);
+        showSquares(tips, currentGame, distinctMoves);
+      }
+      if (SHOW_ARROWS) {
+        drawArrows(tips, currentGame, distinctMoves);
       }
     } else {
       backUrl = SAD_HORSEY;
       infoText = 'No tips found :(';
     }
 
-    const check = jQuery('<input/>', {
-      id: 'showSquares',
-      type: 'checkbox',
-      checked: SHOW_SQUARES,
-    }).click((x) => {
-      if (x.target.checked) {
-        showSquares(tips, currentGame);
-      } else {
-        removeSquares();
-      }
-    });
-
     const tipInfo = jQuery('<span/>', { class: 'tip-info' }).append(infoText);
-    if (SHOW_SQUARES && false) {
-      tipInfo.append(check);
-    }
     const ul = jQuery('<ul/>', { class: 'tip' }).html(linkText);
     const divTipContent = jQuery('.tips-content');
     if (divTipContent) {
       divTipContent.css('background-image', `url('${backUrl}')`);
     }
-    //TODO draw arrows ?
 
     return [tipInfo, ul];
   }

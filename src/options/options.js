@@ -12,6 +12,8 @@ function saveOptions(e) {
     startColor: doc.getElementById('startColor').value,
     destColor: doc.getElementById('destColor').value,
     showSquares: doc.getElementById('showSquares').checked,
+    showArrows: doc.getElementById('showArrows').checked,
+    arrowsColor: doc.getElementById('arrowsColor').value,
   });
   e.preventDefault();
 }
@@ -32,8 +34,22 @@ function restoreOptions() {
     doc.getElementById('delay').value = res.delay ? res.delay : 300;
     doc.getElementById('showSquares').checked =
       res.showSquares !== undefined ? res.showSquares : true;
+    doc.getElementById('showArrows').checked =
+      res.showArrows !== undefined ? res.showArrows : true;
+    doc.getElementById('arrowsColor').value = res.arrowsColor
+      ? res.arrowsColor
+      : '#bf811d';
   });
 }
+
+doc.getElementById('showArrows').onchange = function () {
+  doc.getElementById('arrowsColor').disabled = !this.checked;
+  if (!this.checked) {
+    doc.getElementById('labelArrowsColor').classList.add('disabled');
+  } else {
+    doc.getElementById('labelArrowsColor').classList.remove('disabled');
+  }
+};
 
 doc.getElementById('showSquares').onchange = function () {
   doc.getElementById('startColor').disabled = !this.checked;

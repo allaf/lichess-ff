@@ -150,7 +150,7 @@ var utils = {
       .filter((x) => !!x);
   },
 
-  squareNameToPxCoord: (square, boardWidth, color) => {
+  squareNameToPxCoord: (square, boardWidth, color, offset = { x: 0, y: 0 }) => {
     const unit = boardWidth / 8;
     let col, line;
     if (color === 'white') {
@@ -160,7 +160,7 @@ var utils = {
       col = 8 - (square.substr(0, 1).charCodeAt(0) - 96);
       line = Number(square.substr(1, 1)) - 1;
     }
-    return { x: col * unit, y: line * unit };
+    return { x: col * unit + offset.x, y: line * unit + offset.y };
   },
 };
 
