@@ -40,7 +40,9 @@ var utils = {
     utils.getSortedTuples(tips, gameFen).map(utils.tupleToHtml),
 
   getDistinctMoves: (tips, gameFen) =>
-    new Set(utils.getSortedTuples(tips, gameFen).map((x) => x.move)),
+    Array.from(
+      new Set(utils.getSortedTuples(tips, gameFen).map((x) => x.move))
+    ),
 
   executeScripts: (tabId, injectDetailsArray) => {
     function createCallback(tabId, injectDetails, innerCallback) {

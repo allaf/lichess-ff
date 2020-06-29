@@ -40,36 +40,43 @@
       const tipsDiv = jQuery('.mchat__content.tips-content');
       if (tipsDiv) {
         tipsDiv.empty();
-        tipsDiv.append(buildHtmlTips(game));
+        tipsDiv.append(buildHtmlTipsAndShowTips(game));
+        showTipsOnBoard(game);
         jQuery('#tips-refresh').removeClass('working');
       }
     }
   });
 
-  function showSquares(tips, currentGame, distinctMoves) {
-    // const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen); //TODO pass as argument
+  function showSquares(currentGame, distinctMoves) {
     const width = jQuery('cg-container').innerWidth();
     const col = currentGame.color.substr(0, 1);
     const fullFen = `${currentGame.fen} ${col} KQkq - 1 1`;
     const chess = new ChessJs(fullFen);
-    jQuery('square.tip-square').remove();
+
+    removeTipSquares();
     distinctMoves.forEach((tip) => {
       drawMove(tip, currentGame.color, width, chess, jQuery('cg-board'));
     });
   }
 
+  function removeTipSquares() {
+    return jQuery('square.tip-square').remove();
+  }
+
+  function removeArrows() {
+    return jQuery('cg-board>svg#svg-tips').remove();
+  }
+
   jQuery(window).resize(function () {
     const currentGame = gameSubject.getValue();
     const tips = Utils.fetchTips(currentGame, DB);
-    let distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
-    if (SHOW_SQUARES) {
-      if (tips.length) {
-        showSquares(tips, currentGame, distinctMoves);
+    const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
+    if (tips.length) {
+      if (SHOW_SQUARES) {
+        showSquares(currentGame, distinctMoves);
       }
-    }
-    if (SHOW_ARROWS) {
-      if (tips.length) {
-        drawArrows(tips, currentGame, distinctMoves);
+      if (SHOW_ARROWS) {
+        drawArrows(currentGame, distinctMoves);
       }
     }
   });
@@ -129,7 +136,11 @@
         tipsDiv.removeClass();
         tipsDiv.addClass('mchat__content');
         tipsDiv.addClass('tips-content');
-        tipsDiv.append(buildHtmlTips(gameSubject.getValue()));
+        const currentGame = gameSubject.getValue();
+        var htmlTips = buildHtmlTipsAndShowTips(gameSubject.getValue());
+        tipsDiv.append(htmlTips);
+
+        showTipsOnBoard(currentGame);
       } else {
         const contentObj = jQuery('.mchat__content');
         jQuery('.tips-content').empty();
@@ -139,15 +150,15 @@
     jQuery('.mchat__tab.tips').click();
   }
 
-  function drawArrows(tips, currentGame, distinctMoves) {
+  function drawArrows(currentGame, distinctMoves) {
     const width = jQuery('cg-container').innerWidth();
     const col = currentGame.color.substr(0, 1);
     const fullFen = `${currentGame.fen} ${col} KQkq - 1 1`;
     const chess = new ChessJs(fullFen);
-    jQuery('cg-board>svg#svg-tips').remove();
     const drawColor = ARROWS_COLOR;
 
-    //TODO drawArrows
+    removeArrows();
+
     if (!jQuery('cg-board>svg#svg-tips').length) {
       var svgTips = D3.select('cg-board').append('svg').attr('id', 'svg-tips');
       svgTips
@@ -194,7 +205,27 @@
     }
   }
 
-  function buildHtmlTips(currentGame) {
+  function showTipsOnBoard(currentGame) {
+    const tips = Utils.fetchTips(currentGame, DB);
+    if (tips.length) {
+      const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
+      if (SHOW_SQUARES) {
+        showSquares(currentGame, distinctMoves);
+      }
+      if (SHOW_ARROWS) {
+        drawArrows(currentGame, distinctMoves);
+      }
+    } else {
+      if (SHOW_SQUARES) {
+        removeTipSquares();
+      }
+      if (SHOW_ARROWS) {
+        removeArrows();
+      }
+    }
+  }
+
+  function buildHtmlTipsAndShowTips(currentGame) {
     const tips = Utils.fetchTips(currentGame, DB);
     let backUrl;
     let infoText = '';
@@ -205,13 +236,6 @@
       const distinctMoves = Utils.getDistinctMoves(tips, currentGame.fen);
       infoText = Array.from(distinctMoves).join(' ');
       linkText = links.join('');
-
-      if (SHOW_SQUARES) {
-        showSquares(tips, currentGame, distinctMoves);
-      }
-      if (SHOW_ARROWS) {
-        drawArrows(tips, currentGame, distinctMoves);
-      }
     } else {
       backUrl = SAD_HORSEY;
       infoText = 'No tips found :(';
