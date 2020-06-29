@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "lichess-ff",
-  "version": "0.4.7",
+  "version": "0.4.8",
   "description": "Chess traps hints for Lichess",
   "icons": {
     "32": "img/lichess_logo32.png",
