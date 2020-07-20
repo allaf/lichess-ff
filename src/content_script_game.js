@@ -144,6 +144,7 @@
       } else {
         const contentObj = jQuery('.mchat__content');
         jQuery('.tips-content').empty();
+        jQuery('.tips-content').css('background-image', 'none');
         contentObj.removeClass('tips-content');
       }
     });

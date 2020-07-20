@@ -169,5 +169,5 @@ var utils = {
 try {
   module.exports = utils;
 } catch (error) {
-  console.warn('module export failed', error);
+  // console.warn('module export failed', error);
 }

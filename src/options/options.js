@@ -4,23 +4,30 @@ const doc = document;
 /* eslint-enable no-undef */
 
 function saveOptions(e) {
-  brw.storage.local.set({
-    token: doc.getElementById('token').value.trim(),
-    apiKey: doc.getElementById('apiKey').value.trim(),
-    restdb: doc.getElementById('restdb').value.trim(),
-    delay: doc.getElementById('delay').value.trim(),
-    startColor: doc.getElementById('startColor').value,
-    destColor: doc.getElementById('destColor').value,
-    showSquares: doc.getElementById('showSquares').checked,
-    showArrows: doc.getElementById('showArrows').checked,
-    arrowsColor: doc.getElementById('arrowsColor').value,
-  });
+  brw.storage.local
+    .set({
+      token: doc.getElementById('token').value.trim(),
+      apiKey: doc.getElementById('apiKey').value.trim(),
+      restdb: doc.getElementById('restdb').value.trim(),
+      delay: doc.getElementById('delay').value.trim(),
+      startColor: doc.getElementById('startColor').value,
+      destColor: doc.getElementById('destColor').value,
+      showSquares: doc.getElementById('showSquares').checked,
+      showArrows: doc.getElementById('showArrows').checked,
+      arrowsColor: doc.getElementById('arrowsColor').value,
+    })
+    .then(() => {
+      var status = document.getElementById('status');
+      status.textContent = 'Options saved.';
+      setTimeout(function () {
+        status.textContent = '';
+      }, 2000);
+    });
   e.preventDefault();
 }
 
 function restoreOptions() {
   const storage = brw.storage.local.get();
-
   storage.then((res) => {
     doc.getElementById('token').value = res.token ? res.token.trim() : '';
     doc.getElementById('apiKey').value = res.apiKey ? res.apiKey.trim() : '';
@@ -64,4 +71,4 @@ doc.getElementById('showSquares').onchange = function () {
 };
 
 doc.addEventListener('DOMContentLoaded', restoreOptions);
-doc.addEventListener('change', saveOptions);
+doc.querySelector('form').addEventListener('submit', saveOptions);

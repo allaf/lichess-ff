@@ -61,5 +61,5 @@ var apiUtils = {
 try {
   module.exports = apiUtils;
 } catch (error) {
-  console.warn('module export failed', error);
+  // console.warn('module export failed', error);
 }
